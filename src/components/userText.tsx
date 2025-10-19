@@ -16,11 +16,11 @@ export const UserText = ({ message }: { message: string }) => {
   });
 
   return (
-    <div className="fixed bottom-0 left-0 mb-24 w-full px-4">
-      <div className="mx-auto max-w-4xl w-full">
+    <div className="fixed bottom-0 left-0 mb-24 w-full flex justify-center px-4">
+      <div className="w-full max-w-4xl">
         <div className="relative">
           {/* Kullanıcı Mesaj Balonu */}
-          <div className="bg-gradient-to-br from-gray-50 to-white backdrop-blur-xl rounded-2xl shadow-xl border border-gray-200/50 overflow-hidden">
+          <div className="bg-white/55 backdrop-blur-xl rounded-2xl shadow-xl border border-white/30 overflow-hidden">
             {/* Header */}
             <div className="px-6 py-3 bg-gradient-to-r from-gray-700 to-gray-800">
               <div className="flex items-center gap-3">

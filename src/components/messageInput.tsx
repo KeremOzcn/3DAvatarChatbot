@@ -210,16 +210,17 @@ export default function MessageInput({
   }
 
   return (
-    <div className="fixed bottom-4 z-20 w-full px-4">
-      <div className="mx-auto max-w-4xl">
-        <div className="bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-200/50 p-4">
-          <div className="flex items-center gap-3">
+    <div className="fixed bottom-4 z-20 w-full flex justify-center px-4">
+      <div className="w-full max-w-4xl">
+        <div className="bg-white/50 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/30 p-4">
+          <div className="flex items-center justify-center gap-3">
             {/* Mikrofon Butonu */}
             <div className="flex-shrink-0">
               {config("chatbot_backend") === "moshi" ? (
                 <button
                   className={`
                     relative w-14 h-14 rounded-full transition-all duration-300
+                    flex items-center justify-center
                     ${!moshiMuted 
                       ? 'bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 shadow-lg shadow-red-500/50' 
                       : 'bg-gradient-to-br from-secondary to-emerald-500 hover:from-emerald-500 hover:to-secondary shadow-lg shadow-secondary/50'
@@ -234,18 +235,21 @@ export default function MessageInput({
                     setMoshiMuted(!moshiMuted);
                   }}
                 >
-                  <IconButton
-                    iconName={!moshiMuted ? "24/PauseAlt" : "24/Microphone"}
-                    className="bg-transparent hover:bg-transparent active:bg-transparent"
-                    isProcessing={moshiMuted && moshi.getRecorder() != null}
-                    disabled={!moshi.getRecorder()}
-                    onClick={() => {}}
-                  />
+                  <div className="flex items-center justify-center">
+                    <IconButton
+                      iconName={!moshiMuted ? "24/PauseAlt" : "24/Microphone"}
+                      className="bg-transparent hover:bg-transparent active:bg-transparent"
+                      isProcessing={moshiMuted && moshi.getRecorder() != null}
+                      disabled={!moshi.getRecorder()}
+                      onClick={() => {}}
+                    />
+                  </div>
                 </button>
               ) : (
                 <button
                   className={`
                     relative w-14 h-14 rounded-full transition-all duration-300
+                    flex items-center justify-center
                     ${vad.listening 
                       ? 'bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 shadow-lg shadow-red-500/50' 
                       : 'bg-gradient-to-br from-secondary to-emerald-500 hover:from-emerald-500 hover:to-secondary shadow-lg shadow-secondary/50'
@@ -257,13 +261,15 @@ export default function MessageInput({
                   disabled={config('stt_backend') === 'none' || vad.loading || Boolean(vad.errored)}
                   onClick={vad.toggle}
                 >
-                  <IconButton
-                    iconName={vad.listening ? "24/PauseAlt" : "24/Microphone"}
-                    className="bg-transparent hover:bg-transparent active:bg-transparent"
-                    isProcessing={vad.userSpeaking}
-                    disabled={config('stt_backend') === 'none' || vad.loading || Boolean(vad.errored)}
-                    onClick={() => {}}
-                  />
+                  <div className="flex items-center justify-center">
+                    <IconButton
+                      iconName={vad.listening ? "24/PauseAlt" : "24/Microphone"}
+                      className="bg-transparent hover:bg-transparent active:bg-transparent"
+                      isProcessing={vad.userSpeaking}
+                      disabled={config('stt_backend') === 'none' || vad.loading || Boolean(vad.errored)}
+                      onClick={() => {}}
+                    />
+                  </div>
                 </button>
               )}
             </div>
@@ -310,6 +316,7 @@ export default function MessageInput({
               <button
                 className={`
                   relative w-14 h-14 rounded-full transition-all duration-300
+                  flex items-center justify-center
                   bg-gradient-to-br from-primary to-blue-600 
                   hover:from-blue-600 hover:to-primary 
                   shadow-lg shadow-primary/50
@@ -320,13 +327,15 @@ export default function MessageInput({
                 disabled={isChatProcessing || !userMessage || transcriber.isModelLoading || config("chatbot_backend") === "moshi"}
                 onClick={clickedSendButton}
               >
-                <IconButton
-                  iconName="24/Send"
-                  className="bg-transparent hover:bg-transparent active:bg-transparent"
-                  isProcessing={isChatProcessing || transcriber.isBusy}
-                  disabled={isChatProcessing || !userMessage || transcriber.isModelLoading || config("chatbot_backend") === "moshi"}
-                  onClick={() => {}}
-                />
+                <div className="flex items-center justify-center">
+                  <IconButton
+                    iconName="24/Send"
+                    className="bg-transparent hover:bg-transparent active:bg-transparent"
+                    isProcessing={isChatProcessing || transcriber.isBusy}
+                    disabled={isChatProcessing || !userMessage || transcriber.isModelLoading || config("chatbot_backend") === "moshi"}
+                    onClick={() => {}}
+                  />
+                </div>
               </button>
             </div>
           </div>
