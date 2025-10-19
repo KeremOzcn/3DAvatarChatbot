@@ -172,7 +172,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 👥 Contact
 
 - **Club**: AI for Social Goods Club
-- **University**: Istanbul University
+- **University**: Istinye University
 - **Instagram**: [@aisg_club](https://instagram.com/aisg_club)
 - **GitHub**: [KeremOzcn](https://github.com/KeremOzcn)
 
