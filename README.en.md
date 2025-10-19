@@ -1,6 +1,6 @@
 # 🤖 AI for Social Goods Club - 3D Avatar Chatbot
 
-> İstinye Üniversitesi AI for Social Goods Club'ın resmi 3D sanal asistan projesi
+> Official 3D virtual assistant project of Istanbul University AI for Social Goods Club
 
 [![Next.js](https://img.shields.io/badge/Next.js-14-black)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-18-blue)](https://reactjs.org/)
@@ -10,75 +10,75 @@
 
 ---
 
-**🌍 Language / Dil:** [English](README.en.md) | **Türkçe**
+**🌍 Language / Dil:** **English** | [Türkçe](README.md)
 
 ---
 
 ![Demo](https://via.placeholder.com/800x400/10b981/ffffff?text=3D+Avatar+Chatbot+Demo)
 
-## 🎯 Özellikler
+## 🎯 Features
 
-- 🤖 **3D Avatar**: VRM formatında özelleştirilebilir 3D karakter
-- 💬 **Çoklu Dil Desteği**: Türkçe ve İngilizce
-- 🎤 **Ses Tanıma**: Whisper.cpp ile konuşma tanıma
-- 🔊 **Sesli Yanıt**: ElevenLabs TTS entegrasyonu
-- 🧠 **AI Backend**: Ollama (Qwen3:8b) ve Gemini desteği
-- 🎨 **Modern UI**: Yeşil saydam tasarım, backdrop blur efektleri
+- 🤖 **3D Avatar**: Customizable 3D character in VRM format
+- 💬 **Multi-language Support**: Turkish and English
+- 🎤 **Voice Recognition**: Speech recognition with Whisper.cpp
+- 🔊 **Voice Response**: ElevenLabs TTS integration
+- 🧠 **AI Backend**: Ollama (Qwen3:8b) and Gemini support
+- 🎨 **Modern UI**: Green transparent design with backdrop blur effects
 
-## 🚀 Kurulum
+## 🚀 Installation
 
-### Gereksinimler
+### Requirements
 
-- Node.js 18.18.0 veya üzeri
-- Ollama (yerel AI modeli için)
-- Whisper.cpp (ses tanıma için)
+- Node.js 18.18.0 or higher
+- Ollama (for local AI model)
+- Whisper.cpp (for speech recognition)
 
-### Adımlar
+### Steps
 
-1. **Projeyi klonlayın:**
+1. **Clone the project:**
 ```bash
-git clone https://github.com/YOUR_USERNAME/aisg-3d-chatbot.git
-cd aisg-3d-chatbot
+git clone https://github.com/KeremOzcn/3DAvatarChatbot.git
+cd 3DAvatarChatbot
 ```
 
-2. **Bağımlılıkları yükleyin:**
+2. **Install dependencies:**
 ```bash
 npm install
 ```
 
-3. **Environment dosyasını oluşturun:**
+3. **Create environment file:**
 ```bash
 cp .env.example .env.local
 ```
 
-4. **API anahtarlarınızı ekleyin:**
-`.env.local` dosyasını düzenleyin ve gerekli API anahtarlarını ekleyin:
+4. **Add your API keys:**
+Edit `.env.local` file and add required API keys:
 - Gemini API Key: https://makersuite.google.com/app/apikey
 - ElevenLabs API Key: https://elevenlabs.io/
 
-5. **(Opsiyonel) Ollama'yı kurun:**
+5. **(Optional) Install Ollama:**
 ```bash
-# Ollama'yı https://ollama.ai adresinden indirin
+# Download Ollama from https://ollama.ai
 ollama pull qwen3:8b
 ```
 
-6. **(Opsiyonel) Whisper.cpp'yi kurun:**
+6. **(Optional) Install Whisper.cpp:**
 ```bash
 # https://github.com/ggerganov/whisper.cpp
-# Port 8081'de çalıştırın
+# Run on port 8081
 ```
 
-7. **Geliştirme sunucusunu başlatın:**
+7. **Start development server:**
 ```bash
 npm run dev
 ```
 
-8. **Tarayıcınızda açın:**
-Tarayıcınızda `http://localhost:3000` adresini açın.
+8. **Open in browser:**
+Open `http://localhost:3000` in your browser.
 
-## ⚙️ Yapılandırma
+## ⚙️ Configuration
 
-`.env.local` dosyasında aşağıdaki ayarları yapabilirsiniz:
+You can configure the following settings in `.env.local`:
 
 ### AI Backend
 ```env
@@ -100,31 +100,31 @@ NEXT_PUBLIC_STT_BACKEND=whispercpp
 NEXT_PUBLIC_WHISPERCPP_URL=http://localhost:8081
 ```
 
-### Dil
+### Language
 ```env
-NEXT_PUBLIC_LANGUAGE=tr  # veya 'en'
+NEXT_PUBLIC_LANGUAGE=en  # or 'tr'
 ```
 
-## 🎨 Özelleştirme
+## 🎨 Customization
 
-### Avatar Değiştirme
-1. VRM dosyanızı `public/vrm/` klasörüne koyun
-2. `src/paths.ts` dosyasında `vrmList` dizisine ekleyin
-3. Ayarlar sayfasından yeni avatarı seçin
+### Change Avatar
+1. Put your VRM file in `public/vrm/` folder
+2. Add it to `vrmList` array in `src/paths.ts`
+3. Select new avatar from settings page
 
-### Animasyon Ekleme
-1. VRMA dosyanızı `public/animations/` klasörüne koyun
-2. `src/paths.ts` dosyasında `animationList` dizisine ekleyin
+### Add Animation
+1. Put your VRMA file in `public/animations/` folder
+2. Add it to `animationList` array in `src/paths.ts`
 
-### Arka Plan Değiştirme
-1. Görsel dosyanızı `public/bg/` klasörüne koyun
-2. `src/paths.ts` dosyasında `bgImages` dizisine ekleyin
+### Change Background
+1. Put your image file in `public/bg/` folder
+2. Add it to `bgImages` array in `src/paths.ts`
 
-## 📝 Sistem Promptu
+## 📝 System Prompt
 
-Bot'un davranışını `.env.local` dosyasındaki `NEXT_PUBLIC_SYSTEM_PROMPT` değişkeni ile özelleştirebilirsiniz.
+You can customize the bot's behavior with the `NEXT_PUBLIC_SYSTEM_PROMPT` variable in `.env.local`.
 
-## 🛠️ Teknolojiler
+## 🛠️ Technologies
 
 - **Frontend**: Next.js 14, React 18, TypeScript
 - **3D**: Three.js, @pixiv/three-vrm
@@ -136,18 +136,18 @@ Bot'un davranışını `.env.local` dosyasındaki `NEXT_PUBLIC_SYSTEM_PROMPT` de
 
 ## 📦 Build
 
-Production build oluşturmak için:
+To create a production build:
 
 ```bash
 npm run build
 npm start
 ```
 
-## 🤝 Katkıda Bulunma
+## 🤝 Contributing
 
-AI for Social Goods Club üyeleri projeye katkıda bulunabilir.
+AI for Social Goods Club members can contribute to the project. See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
-## � LAcknowledgments
+## 🙏 Acknowledgments
 
 This project is built upon [Amica](https://github.com/semperai/amica), an open-source 3D avatar framework. We've customized and extended it for educational purposes and community engagement.
 
@@ -162,6 +162,8 @@ This project is built upon [Amica](https://github.com/semperai/amica), an open-s
 - Educational system prompts for club promotion
 - Simplified configuration for student use
 - Additional documentation and setup guides
+
+For detailed credits, see [CREDITS.md](CREDITS.md).
 
 ## 📄 License
 
