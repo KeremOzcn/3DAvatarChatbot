@@ -1,6 +1,9 @@
 MIT License
 
-Copyright (c) 2023 Semper AI, pixiv Inc.
+Copyright (c) 2023 Semper AI, pixiv Inc. (Original Amica Project)
+Copyright (c) 2024 AI for Social Goods Club, Istanbul University (Modifications)
+
+This project is a derivative work based on Amica (https://github.com/semperai/amica)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

@@ -141,16 +141,35 @@ npm start
 
 AI for Social Goods Club üyeleri projeye katkıda bulunabilir.
 
-## 📄 Lisans
+## � LAcknowledgments
 
-Bu proje MIT lisansı altında lisanslanmıştır.
+This project is built upon [Amica](https://github.com/semperai/amica), an open-source 3D avatar framework. We've customized and extended it for educational purposes and community engagement.
 
-## 👥 İletişim
+**Original Project:**
+- **Amica** by [Semper AI](https://github.com/semperai/amica)
+- Licensed under MIT License
+- We thank the Amica team for their amazing work on the VRM avatar system and AI integration framework
 
-- **Kulüp**: AI for Social Goods Club
-- **Üniversite**: İstinye Üniversitesi
-- **Instagram**: @aisg_club
+**Our Contributions:**
+- Custom UI/UX design with glassmorphism
+- Bilingual support (Turkish/English)
+- Educational system prompts for club promotion
+- Simplified configuration for student use
+- Additional documentation and setup guides
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+**Note:** This is a derivative work based on Amica (MIT License). All modifications and additions are also released under MIT License.
+
+## 👥 Contact
+
+- **Club**: AI for Social Goods Club
+- **University**: Istanbul University
+- **Instagram**: [@aisg_club](https://instagram.com/aisg_club)
+- **GitHub**: [KeremOzcn](https://github.com/KeremOzcn)
 
 ---
 
-Made with ❤️ by AI for Social Goods Club
+Made with ❤️ by AI for Social Goods Club | Based on [Amica](https://github.com/semperai/amica)

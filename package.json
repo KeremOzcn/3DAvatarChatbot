@@ -6,7 +6,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/YOUR_USERNAME/aisg-3d-chatbot.git"
+    "url": "https://github.com/KeremOzcn/3DAvatarChatbot.git"
+  },
+  "homepage": "https://github.com/KeremOzcn/3DAvatarChatbot#readme",
+  "bugs": {
+    "url": "https://github.com/KeremOzcn/3DAvatarChatbot/issues"
   },
   "keywords": [
     "3d-avatar",
