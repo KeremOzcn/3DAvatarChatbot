@@ -1,2 +1,0 @@
-// Sentry server placeholder
-export {};

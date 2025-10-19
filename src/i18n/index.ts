@@ -15,10 +15,14 @@ i18n
   .init({
     debug: isDev,
     fallbackLng: 'en',
+    lng: 'en', // Set default language to English
     interpolation: {
       escapeValue: false, // not needed for react as it escapes by default
     },
     resources: langs,
+    react: {
+      useSuspense: false, // Disable suspense to avoid hydration issues
+    },
   });
 
 export default i18n;

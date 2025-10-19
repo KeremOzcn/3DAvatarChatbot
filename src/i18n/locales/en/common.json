@@ -30,6 +30,9 @@
   "Background Video": "Background Video",
   "YouTube Video ID": "YouTube Video ID",
   "Character Animation": "Character Animation",
+  "Select the animation to play when idle. To load more animations refer to docs.": "Select the animation to play when idle. To load more animations refer to docs.",
+  "Procedural Animation": "Procedural Animation",
+  "Use experimental procedural animation": "Use experimental procedural animation",
   "Select the animation to play": "Select the animation to play",
   "Animation": "Animation",
   "Character Model": "Character Model",
@@ -147,5 +150,16 @@
   "Use": "Use",
   "Set": "Set",
   "Enabled": "Enabled",
-  "STOP SEQUENCE": " STOP SEQUENCE"
+  "STOP SEQUENCE": " STOP SEQUENCE",
+  "Quick Switch": "Quick Switch",
+  "Switch to Gemini 2.5 Flash": "Switch to Gemini 2.5 Flash",
+  "Switch to Qwen3:8b (Ollama)": "Switch to Qwen3:8b (Ollama)",
+  "Currently selected": "Currently selected",
+  "Gemini": "Gemini",
+  "Configure Gemini": "Configure Gemini",
+  "Configure Ollama": "Configure Ollama",
+  "Select the language of the interface.": "Select the language of the interface.",
+  "Procedural Animation": "Procedural Animation",
+  "Use experimental procedural animation": "Use experimental procedural animation",
+  "Type your message...": "Type your message..."
 }

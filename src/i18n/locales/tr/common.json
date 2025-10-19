@@ -41,6 +41,7 @@
   "Click here to configure": "Yapılandırmak için buraya tıklayın",
   "Appearance": "Görünüm",
   "ChatBot": "Sohbet Robotu",
+  "Language": "Dil",
   "Text-to-Speech": "Metinden Sese",
   "Speech-to-text": "Sesten Metine",
   "Vision": "Görüş",
@@ -147,5 +148,17 @@
   "Use": "Kullan",
   "Set": "Ayarla",
   "Enabled": "Etkin",
-  "STOP SEQUENCE": "DURDURMA DİZİSİ"
+  "STOP SEQUENCE": "DURDURMA DİZİSİ",
+  "Quick Switch": "Hızlı Geçiş",
+  "Switch to Gemini 2.5 Flash": "Gemini 2.5 Flash'a geç",
+  "Switch to Qwen3:8b (Ollama)": "Qwen3:8b (Ollama)'ya geç",
+  "Currently selected": "Şu an seçili",
+  "Gemini": "Gemini",
+  "Configure Gemini": "Gemini'yi Yapılandır",
+  "Configure Ollama": "Ollama'yı Yapılandır",
+  "Select the language of the interface.": "Arayüzün dilini seçin.",
+  "Procedural Animation": "Prosedürel Animasyon",
+  "Use experimental procedural animation": "Deneysel prosedürel animasyon kullan",
+  "Select the animation to play when idle. To load more animations refer to docs.": "Boştayken oynatılacak animasyonu seçin. Daha fazla animasyon yüklemek için belgelere bakın.",
+  "Type your message...": "Mesajınızı yazın..."
 }

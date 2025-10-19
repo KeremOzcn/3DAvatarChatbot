@@ -3,18 +3,17 @@ ort.env.wasm.wasmPaths = '/_next/static/chunks/'
 
 import { useContext, useEffect, useRef, useState } from "react";
 import { useMicVAD } from "@ricky0123/vad-react"
+import { useTranslation } from 'react-i18next';
 import { IconButton } from "./iconButton";
 import { useTranscriber } from "@/hooks/useTranscriber";
 import { cleanTranscript, cleanFromPunctuation, cleanFromWakeWord } from "@/utils/stringProcessing";
 import { hasOnScreenKeyboard } from "@/utils/hasOnScreenKeyboard";
 import { AlertContext } from "@/features/alert/alertContext";
 import { ChatContext } from "@/features/chat/chatContext";
-import { openaiWhisper  } from "@/features/openaiWhisper/openaiWhisper";
 import { whispercpp  } from "@/features/whispercpp/whispercpp";
 import { config } from "@/utils/config";
 import { WaveFile } from "wavefile";
 import { AmicaLifeContext } from "@/features/amicaLife/amicaLifeContext";
-import { AudioControlsContext } from "@/features/moshi/components/audioControlsContext";
 
 
 export default function MessageInput({
@@ -30,15 +29,13 @@ export default function MessageInput({
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => void;
 }) {
+  const { t } = useTranslation();
   const transcriber = useTranscriber();
   const inputRef = useRef<HTMLInputElement>(null);
-  const [whisperOpenAIOutput, setWhisperOpenAIOutput] = useState<any | null>(null);
   const [whisperCppOutput, setWhisperCppOutput] = useState<any | null>(null);
   const { chat: bot } = useContext(ChatContext);
   const { alert } = useContext(AlertContext);
   const { amicaLife } = useContext(AmicaLifeContext);
-  const { audioControls: moshi } = useContext(AudioControlsContext);
-  const [ moshiMuted, setMoshiMuted] = useState(moshi.isMuted());
 
   const vad = useMicVAD({
     startOnLoad: false,
@@ -63,36 +60,18 @@ export default function MessageInput({
             // both are 16000
             const audioCtx = new AudioContext();
             const buffer = audioCtx.createBuffer(1, audio.length, 16000);
+            // @ts-ignore - Type compatibility issue with Float32Array
             buffer.copyToChannel(audio, 0, 0);
             transcriber.start(buffer);
-            break;
-          }
-          case 'whisper_openai': {
-            console.debug('whisper_openai attempt');
-            const wav = new WaveFile();
-            wav.fromScratch(1, 16000, '32f', audio);
-            const file = new File([wav.toBuffer()], "input.wav", { type: "audio/wav" });
-
-            let prompt;
-            // TODO load prompt if it exists
-
-            (async () => {
-              try {
-                const transcript = await openaiWhisper(file, prompt);
-                setWhisperOpenAIOutput(transcript);
-              } catch (e: any) {
-                console.error('whisper_openai error', e);
-                alert.error('whisper_openai error', e.toString());
-              }
-            })();
             break;
           }
           case 'whispercpp': {
             console.debug('whispercpp attempt');
             const wav = new WaveFile();
-            wav.fromScratch(1, 16000, '32f', audio);
+            wav.fromScratch(1, 16000, '32f', new Float32Array(audio.buffer));
             wav.toBitDepth('16');
-            const file = new File([wav.toBuffer()], "input.wav", { type: "audio/wav" });
+            const wavBuffer = wav.toBuffer();
+            const file = new File([new Uint8Array(wavBuffer)], "input.wav", { type: "audio/wav" });
 
             let prompt;
             // TODO load prompt if it exists
@@ -182,14 +161,6 @@ export default function MessageInput({
     }
   }, [transcriber]);
 
-  // for whisper_openai
-  useEffect(() => {
-    if (whisperOpenAIOutput) {
-      const output = whisperOpenAIOutput?.text;
-      handleTranscriptionResult(output);
-    }
-  }, [whisperOpenAIOutput]);
-
   // for whispercpp
   useEffect(() => {
     if (whisperCppOutput) {
@@ -210,133 +181,51 @@ export default function MessageInput({
   }
 
   return (
-    <div className="fixed bottom-4 z-20 w-full flex justify-center px-4">
-      <div className="w-full max-w-4xl">
-        <div className="bg-white/50 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/30 p-4">
-          <div className="flex items-center justify-center gap-3">
-            {/* Mikrofon Butonu */}
-            <div className="flex-shrink-0">
-              {config("chatbot_backend") === "moshi" ? (
-                <button
-                  className={`
-                    relative w-14 h-14 rounded-full transition-all duration-300
-                    flex items-center justify-center
-                    ${!moshiMuted 
-                      ? 'bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 shadow-lg shadow-red-500/50' 
-                      : 'bg-gradient-to-br from-secondary to-emerald-500 hover:from-emerald-500 hover:to-secondary shadow-lg shadow-secondary/50'
-                    }
-                    ${moshiMuted && moshi.getRecorder() != null ? 'animate-pulse-slow' : ''}
-                    disabled:opacity-50 disabled:cursor-not-allowed
-                    active:scale-95 transform
-                  `}
-                  disabled={!moshi.getRecorder()}
-                  onClick={() => {
-                    moshi.toggleMute();
-                    setMoshiMuted(!moshiMuted);
-                  }}
-                >
-                  <div className="flex items-center justify-center">
-                    <IconButton
-                      iconName={!moshiMuted ? "24/PauseAlt" : "24/Microphone"}
-                      className="bg-transparent hover:bg-transparent active:bg-transparent"
-                      isProcessing={moshiMuted && moshi.getRecorder() != null}
-                      disabled={!moshi.getRecorder()}
-                      onClick={() => {}}
-                    />
-                  </div>
-                </button>
-              ) : (
-                <button
-                  className={`
-                    relative w-14 h-14 rounded-full transition-all duration-300
-                    flex items-center justify-center
-                    ${vad.listening 
-                      ? 'bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 shadow-lg shadow-red-500/50' 
-                      : 'bg-gradient-to-br from-secondary to-emerald-500 hover:from-emerald-500 hover:to-secondary shadow-lg shadow-secondary/50'
-                    }
-                    ${vad.userSpeaking ? 'animate-pulse-slow' : ''}
-                    disabled:opacity-50 disabled:cursor-not-allowed
-                    active:scale-95 transform
-                  `}
-                  disabled={config('stt_backend') === 'none' || vad.loading || Boolean(vad.errored)}
-                  onClick={vad.toggle}
-                >
-                  <div className="flex items-center justify-center">
-                    <IconButton
-                      iconName={vad.listening ? "24/PauseAlt" : "24/Microphone"}
-                      className="bg-transparent hover:bg-transparent active:bg-transparent"
-                      isProcessing={vad.userSpeaking}
-                      disabled={config('stt_backend') === 'none' || vad.loading || Boolean(vad.errored)}
-                      onClick={() => {}}
-                    />
-                  </div>
-                </button>
-              )}
-            </div>
-
-            {/* Mesaj Input */}
-            <div className="flex-1">
-              <input
-                type="text"
-                ref={inputRef}
-                placeholder={config("chatbot_backend") === "moshi" ? "Moshi modunda devre dışı..." : "Mesajınızı yazın..."}
-                onChange={handleInputChange}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    if (hasOnScreenKeyboard()) {
-                      inputRef.current?.blur();
-                    }
-
-                    if (userMessage === "") {
-                      return false;
-                    }
-
-                    clickedSendButton();
-                  }
-                }}
-                disabled={config("chatbot_backend") === "moshi"}
-                className="
-                  w-full px-5 py-3.5 
-                  bg-gray-50 
-                  border-2 border-transparent
-                  rounded-xl
-                  text-gray-900 text-base
-                  placeholder:text-gray-400
-                  focus:outline-none focus:border-primary focus:bg-white
-                  disabled:bg-gray-100 disabled:cursor-not-allowed
-                  transition-all duration-200
-                "
-                value={userMessage}
-                autoComplete="off"
+    <div className="fixed bottom-4 z-20 w-full px-4">
+      <div className="mx-auto max-w-4xl">
+        <div className="bg-emerald-500/20 backdrop-blur-xl border border-emerald-400/30 rounded-2xl shadow-lg shadow-emerald-500/20 p-3">
+          <div className="grid grid-flow-col grid-cols-[min-content_1fr_min-content] gap-3 items-center">
+            <div>
+              <IconButton
+                iconName={vad.listening ? "24/PauseAlt" : "24/Microphone"}
+                className="bg-emerald-500/30 hover:bg-emerald-500/50 active:bg-emerald-500/60 disabled:bg-gray-500/20 backdrop-blur-md rounded-full transition-all duration-300 border border-emerald-400/30"
+                isProcessing={vad.userSpeaking}
+                disabled={config('stt_backend') === 'none' || vad.loading || Boolean(vad.errored)}
+                onClick={vad.toggle}
               />
             </div>
 
-            {/* Gönder Butonu */}
-            <div className="flex-shrink-0">
-              <button
-                className={`
-                  relative w-14 h-14 rounded-full transition-all duration-300
-                  flex items-center justify-center
-                  bg-gradient-to-br from-primary to-blue-600 
-                  hover:from-blue-600 hover:to-primary 
-                  shadow-lg shadow-primary/50
-                  disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none
-                  active:scale-95 transform
-                  ${(isChatProcessing || transcriber.isBusy) ? 'animate-pulse-slow' : ''}
-                `}
-                disabled={isChatProcessing || !userMessage || transcriber.isModelLoading || config("chatbot_backend") === "moshi"}
+            <input
+              type="text"
+              ref={inputRef}
+              placeholder={t("Type your message...")}
+              onChange={handleInputChange}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  if (hasOnScreenKeyboard()) {
+                    inputRef.current?.blur();
+                  }
+
+                  if (userMessage === "") {
+                    return false;
+                  }
+
+                  clickedSendButton();
+                }
+              }}
+              className="block w-full bg-white/10 backdrop-blur-sm rounded-xl border border-emerald-400/20 py-3 px-4 text-white placeholder:text-emerald-200/60 focus:outline-none focus:ring-2 focus:ring-emerald-400/50 focus:border-transparent transition-all duration-300 sm:text-sm"
+              value={userMessage}
+              autoComplete="off"
+            />
+
+            <div>
+              <IconButton
+                iconName="24/Send"
+                className="bg-emerald-500/30 hover:bg-emerald-500/50 active:bg-emerald-500/60 disabled:bg-gray-500/20 backdrop-blur-md rounded-full transition-all duration-300 border border-emerald-400/30"
+                isProcessing={isChatProcessing || transcriber.isBusy}
+                disabled={isChatProcessing || !userMessage || transcriber.isModelLoading}
                 onClick={clickedSendButton}
-              >
-                <div className="flex items-center justify-center">
-                  <IconButton
-                    iconName="24/Send"
-                    className="bg-transparent hover:bg-transparent active:bg-transparent"
-                    isProcessing={isChatProcessing || transcriber.isBusy}
-                    disabled={isChatProcessing || !userMessage || transcriber.isModelLoading || config("chatbot_backend") === "moshi"}
-                    onClick={() => {}}
-                  />
-                </div>
-              </button>
+              />
             </div>
           </div>
         </div>

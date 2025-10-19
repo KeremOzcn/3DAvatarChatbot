@@ -1,44 +1,79 @@
+import * as THREE from "three";
 import { VRM } from "@pixiv/three-vrm";
 
-const pi = Math.PI;
-const sin = Math.sin;
-const cos = Math.cos;
-
+/**
+ * Procedural animation controller for VRM models
+ * Handles breathing, idle movements, and other procedural animations
+ */
 export class ProceduralAnimation {
   private vrm: VRM;
-  private elapsedTime: number = 0;
+  private clock: THREE.Clock;
+  private enabled: boolean = true;
 
   constructor(vrm: VRM) {
     this.vrm = vrm;
+    this.clock = new THREE.Clock();
   }
 
-  public update(delta: number) {
-    this.elapsedTime += delta;
+  /**
+   * Updates procedural animations
+   * @param delta - Time delta in seconds
+   */
+  public update(delta: number): void {
+    if (!this.enabled || !this.vrm) return;
 
-    if (!this.vrm?.humanoid) return;
+    const time = this.clock.getElapsedTime();
 
-    const humanoid = this.vrm.humanoid;
+    // Breathing animation
+    this.updateBreathing(time);
 
-    humanoid.getNormalizedBoneNode("spine")!.rotation.x =
-      -0.2 - 0.04 * pi * sin(this.elapsedTime);
+    // Idle sway animation
+    this.updateIdleSway(time);
+  }
 
-    humanoid.getNormalizedBoneNode("neck")!.rotation.x =
-      -0.02 * pi * sin(this.elapsedTime);
+  /**
+   * Updates breathing animation
+   */
+  private updateBreathing(time: number): void {
+    const breathingSpeed = 2.0;
+    const breathingAmount = 0.01;
+    
+    const breathingValue = Math.sin(time * breathingSpeed) * breathingAmount;
+    
+    // Apply breathing to chest/spine
+    const spine = this.vrm.humanoid?.getNormalizedBoneNode("spine");
+    if (spine) {
+      spine.scale.y = 1 + breathingValue;
+    }
+  }
 
-    humanoid.getNormalizedBoneNode("leftUpperArm")!.rotation.z = 1.3;
-    humanoid.getNormalizedBoneNode("rightUpperArm")!.rotation.z = -1.3;
+  /**
+   * Updates idle sway animation
+   */
+  private updateIdleSway(time: number): void {
+    const swaySpeed = 0.5;
+    const swayAmount = 0.02;
+    
+    const swayValue = Math.sin(time * swaySpeed) * swayAmount;
+    
+    // Apply subtle sway to hips
+    const hips = this.vrm.humanoid?.getNormalizedBoneNode("hips");
+    if (hips) {
+      hips.rotation.z = swayValue;
+    }
+  }
 
-    humanoid.getNormalizedBoneNode("leftUpperLeg")!.rotation.z =
-      -0.4 - 0.01 * pi * sin(this.elapsedTime);
-    humanoid.getNormalizedBoneNode("rightUpperLeg")!.rotation.z =
-      0.4 + 0.01 * pi * sin(this.elapsedTime);
+  /**
+   * Enables or disables procedural animation
+   */
+  public setEnabled(enabled: boolean): void {
+    this.enabled = enabled;
+  }
 
-    humanoid.getNormalizedBoneNode("leftLowerLeg")!.rotation.x =
-      -1.9 + 0.01 * pi * sin(this.elapsedTime);
-    humanoid.getNormalizedBoneNode("rightLowerLeg")!.rotation.x =
-      -1.1 + 0.01 * pi * sin(this.elapsedTime);
-    // humanoid!.getNormalizedBoneNode('neck')!.rotation.y = 0.101 * pi * sin(pi * this.elapsedTime);
-    // humanoid!.getNormalizedBoneNode( 'leftUpperArm' )!.rotation.z = s;
-    // humanoid!.getNormalizedBoneNode( 'rightUpperArm' )!.rotation.x = s;
+  /**
+   * Resets all procedural animations
+   */
+  public reset(): void {
+    this.clock = new THREE.Clock();
   }
 }

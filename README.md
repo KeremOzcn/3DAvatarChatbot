@@ -1,309 +1,156 @@
-# 🤖 AI for Social Goods Club - Yapay Zeka Asistanı
+# 🤖 AI for Social Goods Club - 3D Avatar Chatbot
 
-İstinye Üniversitesi AI for Social Goods Club için geliştirilmiş interaktif 3D yapay zeka asistanı.
+> İstinye Üniversitesi AI for Social Goods Club'ın resmi 3D sanal asistan projesi
 
-![Project Status](https://img.shields.io/badge/status-active-success.svg)
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
+[![Next.js](https://img.shields.io/badge/Next.js-14-black)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-18-blue)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue)](https://www.typescriptlang.org/)
+[![Three.js](https://img.shields.io/badge/Three.js-0.169-green)](https://threejs.org/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-## 📋 İçindekiler
+![Demo](https://via.placeholder.com/800x400/10b981/ffffff?text=3D+Avatar+Chatbot+Demo)
 
-- [Özellikler](#özellikler)
-- [Teknolojiler](#teknolojiler)
-- [Kurulum](#kurulum)
-- [Kullanım](#kullanım)
-- [Yapılandırma](#yapılandırma)
-- [Geliştirme](#geliştirme)
-- [Katkıda Bulunma](#katkıda-bulunma)
+## 🎯 Özellikler
 
-## ✨ Özellikler
+- 🤖 **3D Avatar**: VRM formatında özelleştirilebilir 3D karakter
+- 💬 **Çoklu Dil Desteği**: Türkçe ve İngilizce
+- 🎤 **Ses Tanıma**: Whisper.cpp ile konuşma tanıma
+- 🔊 **Sesli Yanıt**: ElevenLabs TTS entegrasyonu
+- 🧠 **AI Backend**: Ollama (Qwen3:8b) ve Gemini desteği
+- 🎨 **Modern UI**: Yeşil saydam tasarım, backdrop blur efektleri
 
-- 🤖 **Yerel AI**: Ollama tabanlı, internet bağlantısı gerektirmeden çalışır
-- 🎭 **3D Avatar**: VRM formatında özelleştirilebilir karakterler
-- 🗣️ **Türkçe Destek**: Tam Türkçe arayüz ve konuşma
-- 🎤 **Sesli Yanıt**: Piper TTS ile doğal Türkçe ses sentezi
-- 🎙️ **Sesli Komut**: Whisper ile Türkçe konuşma tanıma (STT)
-- 💬 **İnteraktif Sohbet**: Stand ziyaretçileri ile sesli veya yazılı iletişim
-- 📚 **Bilgi Bankası**: Kulüp etkinlikleri, projeler ve üyelik bilgileri
-- 🎨 **Özelleştirilebilir**: Karakter, arka plan ve animasyonlar
-
-## 🛠️ Teknolojiler
-
-- **Frontend**: Next.js 14, React 18, TypeScript
-- **AI Backend**: Ollama (qwen3:8b modeli)
-- **3D Rendering**: Three.js, @pixiv/three-vrm
-- **TTS (Text-to-Speech)**: Piper (Türkçe ses sentezi)
-- **STT (Speech-to-Text)**: OpenAI Whisper (Türkçe konuşma tanıma)
-- **Styling**: TailwindCSS
-- **i18n**: i18next (Türkçe/İngilizce)
-
-## 📦 Kurulum
+## 🚀 Kurulum
 
 ### Gereksinimler
 
 - Node.js 18.18.0 veya üzeri
-- Python 3.8 veya üzeri
-- Ollama (yerel AI için)
-- FFmpeg (ses işleme için)
-- npm veya yarn
+- Ollama (yerel AI modeli için)
+- Whisper.cpp (ses tanıma için)
 
-### Adım 1: Projeyi Klonlayın
+### Adımlar
 
+1. **Projeyi klonlayın:**
 ```bash
-git clone https://github.com/[KULLANICI_ADI]/aisg-club-assistant.git
-cd aisg-club-assistant
+git clone https://github.com/YOUR_USERNAME/aisg-3d-chatbot.git
+cd aisg-3d-chatbot
 ```
 
-### Adım 2: Bağımlılıkları Yükleyin
-
+2. **Bağımlılıkları yükleyin:**
 ```bash
 npm install
 ```
 
-### Adım 3: Ollama'yı Kurun ve Başlatın
-
+3. **Environment dosyasını oluşturun:**
 ```bash
-# Ollama'yı indirin: https://ollama.ai
+cp .env.example .env.local
+```
 
-# Modeli indirin
+4. **API anahtarlarınızı ekleyin:**
+`.env.local` dosyasını düzenleyin ve gerekli API anahtarlarını ekleyin:
+- Gemini API Key: https://makersuite.google.com/app/apikey
+- ElevenLabs API Key: https://elevenlabs.io/
+
+5. **(Opsiyonel) Ollama'yı kurun:**
+```bash
+# Ollama'yı https://ollama.ai adresinden indirin
 ollama pull qwen3:8b
-
-# Ollama servisini başlatın
-ollama serve
 ```
 
-### Adım 4: Paths Dosyasını Oluşturun
-
+6. **(Opsiyonel) Whisper.cpp'yi kurun:**
 ```bash
-node scripts/generate_paths.js
+# https://github.com/ggerganov/whisper.cpp
+# Port 8081'de çalıştırın
 ```
 
-### Adım 5: Python Bağımlılıklarını Kurun
-
-```bash
-pip install flask flask-cors openai-whisper piper-tts librosa soundfile
-```
-
-### Adım 6: FFmpeg'i Kurun
-
-**Windows:**
-```bash
-winget install ffmpeg
-```
-
-**macOS:**
-```bash
-brew install ffmpeg
-```
-
-**Linux:**
-```bash
-sudo apt install ffmpeg
-```
-
-### Adım 7: TTS ve STT Sunucularını Başlatın
-
-**Terminal 1 - Piper TTS Sunucusu:**
-```bash
-python piper_server.py
-```
-
-**Terminal 2 - Whisper STT Sunucusu:**
-```bash
-python whisper_server.py
-```
-
-### Adım 8: Geliştirme Sunucusunu Başlatın
-
-**Terminal 3 - Next.js:**
+7. **Geliştirme sunucusunu başlatın:**
 ```bash
 npm run dev
 ```
 
+8. **Tarayıcınızda açın:**
 Tarayıcınızda `http://localhost:3000` adresini açın.
-
-## 🚀 Kullanım
-
-### İlk Kurulum
-
-1. Sayfa açıldığında 3D karakter görünecektir
-2. **Yazarak:** Mesaj kutusuna "Merhaba" yazın ve Enter'a basın
-3. **Konuşarak:** 🎤 Mikrofon butonuna tıklayın ve Türkçe konuşun
-4. Karakter sizi karşılayacak ve kulüp hakkında bilgi verecektir
-5. Karakter Türkçe sesli yanıt verecektir
-
-### Örnek Sorular
-
-- "AI for Social Goods Club nedir?"
-- "Hangi etkinlikler düzenliyorsunuz?"
-- "Nasıl üye olabilirim?"
-- "AI Zirveleri hakkında bilgi ver"
-- "Workshop'larınız var mı?"
-
-### Ayarlar
-
-Sol üstteki ⚙️ ikonuna tıklayarak:
-- Karakter değiştirme
-- Arka plan seçimi
-- Dil değiştirme (TR/EN)
-- Ses ayarları
 
 ## ⚙️ Yapılandırma
 
-### .env.local Dosyası
+`.env.local` dosyasında aşağıdaki ayarları yapabilirsiniz:
 
-Proje kök dizininde `.env.local` dosyası oluşturun:
-
+### AI Backend
 ```env
-# Development
-NEXT_PUBLIC_DEVELOPMENT_BASE_URL=http://localhost:3000
-
-# Chatbot Backend
 NEXT_PUBLIC_CHATBOT_BACKEND=ollama
 NEXT_PUBLIC_OLLAMA_URL=http://localhost:11434
 NEXT_PUBLIC_OLLAMA_MODEL=qwen3:8b
+```
 
-# TTS - Piper (Türkçe)
-NEXT_PUBLIC_TTS_BACKEND=piper
-NEXT_PUBLIC_PIPER_URL=http://localhost:5000/tts
+### TTS (Text-to-Speech)
+```env
+NEXT_PUBLIC_TTS_BACKEND=elevenlabs
+NEXT_PUBLIC_ELEVENLABS_APIKEY=your_api_key
+NEXT_PUBLIC_ELEVENLABS_VOICEID=your_voice_id
+```
 
-# STT - Whisper (Türkçe)
+### STT (Speech-to-Text)
+```env
 NEXT_PUBLIC_STT_BACKEND=whispercpp
-NEXT_PUBLIC_WHISPERCPP_URL=http://localhost:8080
-
-# Language
-NEXT_PUBLIC_LANGUAGE=tr
-
-# Bot Name
-NEXT_PUBLIC_NAME=AI Asistan
+NEXT_PUBLIC_WHISPERCPP_URL=http://localhost:8081
 ```
 
-### Ollama Ayarları
-
-Tarayıcı konsolunda (F12):
-
-```javascript
-localStorage.setItem('chatvrm_chatbot_backend', 'ollama');
-localStorage.setItem('chatvrm_ollama_url', 'http://localhost:11434');
-localStorage.setItem('chatvrm_ollama_model', 'qwen3:8b');
+### Dil
+```env
+NEXT_PUBLIC_LANGUAGE=tr  # veya 'en'
 ```
 
-### TTS Ayarları
+## 🎨 Özelleştirme
 
-```javascript
-localStorage.setItem('chatvrm_tts_backend', 'speecht5');
-localStorage.setItem('chatvrm_speecht5_speaker_embedding_url', '/speecht5_speaker_embeddings/cmu_us_slt_arctic-wav-arctic_a0001.bin');
-```
+### Avatar Değiştirme
+1. VRM dosyanızı `public/vrm/` klasörüne koyun
+2. `src/paths.ts` dosyasında `vrmList` dizisine ekleyin
+3. Ayarlar sayfasından yeni avatarı seçin
 
-### Dil Ayarları
+### Animasyon Ekleme
+1. VRMA dosyanızı `public/animations/` klasörüne koyun
+2. `src/paths.ts` dosyasında `animationList` dizisine ekleyin
 
-```javascript
-localStorage.setItem('chatvrm_language', 'tr'); // Türkçe
-```
+### Arka Plan Değiştirme
+1. Görsel dosyanızı `public/bg/` klasörüne koyun
+2. `src/paths.ts` dosyasında `bgImages` dizisine ekleyin
 
-## 🔧 Geliştirme
+## 📝 Sistem Promptu
 
-### Proje Yapısı
+Bot'un davranışını `.env.local` dosyasındaki `NEXT_PUBLIC_SYSTEM_PROMPT` değişkeni ile özelleştirebilirsiniz.
 
-```
-amica/
-├── public/
-│   ├── vrm/              # 3D karakter modelleri
-│   ├── bg/               # Arka plan resimleri
-│   ├── animations/       # Karakter animasyonları
-│   └── speecht5_speaker_embeddings/
-├── src/
-│   ├── components/       # React bileşenleri
-│   ├── features/         # Özellik modülleri
-│   ├── i18n/            # Çeviri dosyaları
-│   │   └── locales/
-│   │       ├── tr/      # Türkçe
-│   │       └── en/      # İngilizce
-│   └── utils/           # Yardımcı fonksiyonlar
-├── scripts/
-│   └── generate_paths.js # Path oluşturucu
-├── models/              # Piper TTS modelleri
-├── piper_server.py      # Piper TTS sunucusu
-├── whisper_server.py    # Whisper STT sunucusu
-└── .env.local           # Ortam değişkenleri
-```
+## 🛠️ Teknolojiler
 
-### Yeni Karakter Ekleme
+- **Frontend**: Next.js 14, React 18, TypeScript
+- **3D**: Three.js, @pixiv/three-vrm
+- **UI**: Tailwind CSS, Heroicons
+- **AI**: Ollama, Gemini
+- **TTS**: ElevenLabs
+- **STT**: Whisper.cpp
+- **i18n**: i18next, react-i18next
 
-**Not:** VRM dosyaları büyük olduğu için Git LFS kullanmanız veya harici olarak indirmeniz önerilir.
+## 📦 Build
 
-1. VRM dosyasını `/public/vrm/` klasörüne kopyalayın
-2. Thumbnail oluşturun: `thumb-[DOSYA_ADI].jpg`
-3. Paths'i güncelleyin:
-   ```bash
-   node scripts/generate_paths.js
-   ```
-
-**VRM Modelleri İndir:**
-- https://hub.vroid.com/
-- https://booth.pm/
-- https://3d.nicovideo.jp/
-
-### Yeni Dil Ekleme
-
-1. `/src/i18n/locales/` altında yeni klasör oluşturun
-2. `common.json` dosyası ekleyin
-3. `/src/i18n/langs.ts` dosyasını güncelleyin
-
-### Build
+Production build oluşturmak için:
 
 ```bash
-# Production build
 npm run build
-
-# Build'i çalıştır
 npm start
 ```
 
 ## 🤝 Katkıda Bulunma
 
-1. Fork edin
-2. Feature branch oluşturun (`git checkout -b feature/amazing-feature`)
-3. Commit edin (`git commit -m 'feat: Add amazing feature'`)
-4. Push edin (`git push origin feature/amazing-feature`)
-5. Pull Request açın
+AI for Social Goods Club üyeleri projeye katkıda bulunabilir.
 
-### Commit Mesaj Formatı
+## 📄 Lisans
 
-- `feat:` Yeni özellik
-- `fix:` Hata düzeltme
-- `docs:` Dokümantasyon
-- `style:` Kod formatı
-- `refactor:` Kod iyileştirme
-- `test:` Test ekleme
-- `chore:` Bakım işleri
+Bu proje MIT lisansı altında lisanslanmıştır.
 
-## 📝 Lisans
+## 👥 İletişim
 
-Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICENSE) dosyasına bakın.
-
-## 👥 Ekip
-
-**AI for Social Goods Club**
-- İstinye Üniversitesi
-- [Website](https://istinye.edu.tr)
-- [Instagram](https://instagram.com/aisg_club)
-
-## 🆘 Destek
-
-Sorun yaşıyorsanız:
-1. [Issues](https://github.com/[KULLANICI_ADI]/aisg-club-assistant/issues) sayfasını kontrol edin
-2. Yeni issue açın
-3. [GOREV_DOKUMANI.md](GOREV_DOKUMANI.md) dosyasına bakın
-
-## 🙏 Teşekkürler
-
-- [Amica](https://github.com/semperai/amica) - Temel proje
-- [Ollama](https://ollama.ai) - Yerel AI
-- [VRM Consortium](https://vrm.dev) - 3D avatar standardı
-- İstinye Üniversitesi AI for Social Goods Club
+- **Kulüp**: AI for Social Goods Club
+- **Üniversite**: İstinye Üniversitesi
+- **Instagram**: @aisg_club
 
 ---
 
-**Geliştirme Durumu:** Aktif 🟢
-**Son Güncelleme:** Ekim 2025
-**Versiyon:** 1.0.0
+Made with ❤️ by AI for Social Goods Club

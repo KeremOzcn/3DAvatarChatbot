@@ -1,80 +1,54 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { clsx } from "clsx";
+import { IconButton } from "./iconButton";
 import { TimestampedPrompt } from "@/features/amicaLife/eventHandler";
-import { useTranslation } from "react-i18next";
-import { IconBrain } from '@tabler/icons-react';
 
 export const SubconciousText = ({ messages }: { messages: TimestampedPrompt[] }) => {
-    const chatScrollRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [unlimited, setUnlimited] = useState(false);
 
-    useEffect(() => {
-        chatScrollRef.current?.scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-        });
-    }, [messages]);
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+    });
+  });
 
-    return (
-        <div className="fixed w-col-span-6 max-w-full h-full pb-16">
-            <div className="max-h-full px-16 pt-20 pb-4 overflow-y-auto scroll-hidden">
-                {messages.map((msg, i) => {
-                    return (
-                        <div key={i} ref={messages.length - 1 === i ? chatScrollRef : null}>
-                            <Chat
-                                timeStamp={msg.timestamp}
-                                prompt={msg.prompt.replace(/\[(.*?)\]/g, "")}
-                                num={i}
-                            />
-                        </div>
-                    );
-                })}
+  return (
+    <div className="fixed bottom-0 left-0 mb-20 w-full">
+      <div className="mx-auto max-w-4xl w-full px-4 md:px-16">
+        <div className="backdrop-blur-lg rounded-lg">
+          <div className="bg-white/70 rounded-lg backdrop-blur-lg shadow-lg">
+            <div className="px-8 pr-1 py-3 bg-purple-600/90 rounded-t-lg text-white font-bold tracking-wider">
+              <span className="p-4 bg-purple-700/80 rounded-lg rounded-tl-none rounded-tr-none shadow-sm">
+                SUBCONSCIOUS
+              </span>
+              <IconButton
+                iconName="24/FrameSize"
+                className="bg-transparent hover:bg-transparent active:bg-transparent disabled:bg-transparent float-right"
+                isProcessing={false}
+                onClick={() => setUnlimited(!unlimited)}
+              />
             </div>
+            <div className={clsx(
+              "px-8 py-4 overflow-y-auto",
+              unlimited ? 'max-h-[calc(75vh)]' : 'max-h-32',
+            )}>
+              <div className="min-h-8 max-h-full text-gray-700 typography-16 font-bold space-y-2">
+                {messages.map((msg, index) => (
+                  <div key={index} className="border-b border-gray-300 pb-2">
+                    <span className="text-xs text-gray-500">
+                      {new Date(msg.timestamp).toLocaleTimeString()}
+                    </span>
+                    <div>{msg.prompt}</div>
+                  </div>
+                ))}
+                <div ref={scrollRef} />
+              </div>
+            </div>
+          </div>
         </div>
-
-    );
+      </div>
+    </div>
+  );
 };
-
-function Chat({
-    timeStamp,
-    prompt,
-    num,
-}: {
-    timeStamp: string;
-    prompt: string;
-    num: number;
-}) {
-    const { t } = useTranslation();
-    const scrollRef = useRef<HTMLDivElement>(null);
-
-    return (
-        <div className='mx-auto max-w-sm my-8'>
-            <div className="backdrop-blur-lg rounded-lg">
-                <div className="shadow-lg backdrop-blur-lg rounded-lg bg-white/70">
-                    <div className='pr-1 bg-rose/90 rounded-t-lg text-white font-bold tracking-wider px-8 flex items-center justify-between top-0'>
-                        <div className="flex items-center space-x-6">
-                            <span className="p-2 rounded-lg rounded-tl-none rounded-tr-none shadow-sm bg-cyan-600/80">
-                                <IconBrain
-                                    className="h-7 w-7 text-white opacity-100 text-xs"
-                                    aria-hidden="true"
-                                    stroke={2}
-                                />
-                            </span>
-
-                            <div className="min-h-8 max-h-full typography-16 text-sm font-bold text-gray-500 float-right ml-2 mt-1">
-                                {timeStamp}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="px-8 py-4 overflow-y-auto max-h-[calc(75vh)]">
-                        <div className="min-h-8 max-h-full typography-16 font-bold text-gray-600">
-                            {prompt}
-                            <div ref={scrollRef} />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    );
-}
-

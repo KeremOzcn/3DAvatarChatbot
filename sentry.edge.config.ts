@@ -1,2 +1,0 @@
-// Sentry edge placeholder
-export {};

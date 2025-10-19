@@ -7,14 +7,8 @@ import { isTauri } from "@/utils/isTauri";
 
 const chatbotBackends = [
   {key: "echo",       label: "Echo"},
-  {key: "arbius_llm", label: "Arbius"},
-  {key: "chatgpt",    label: "ChatGPT"},
-  {key: "llamacpp",   label: "LLama.cpp"},
   ...isTauri() ? [] : [{key: "windowai", label: "Window.ai"}], // Hides Window.ai when using the desktop app
   {key: "ollama",     label: "Ollama"},
-  {key: "koboldai",   label: "KoboldAI"},
-  {key: "moshi",      label: "Moshi"},
-  {key: "openrouter", label: "OpenRouter"},
   {key: "gemini",     label: "Gemini"},
 ];
 
@@ -53,27 +47,18 @@ export function ChatbotBackendPage({
     })();
   }, []);
 
-  // Hızlı geçiş butonlarının handler'ları
   const switchToGemini = async () => {
-    // Backend'i gemini yap ve önerilen modeli ayarla
     setChatbotBackend("gemini");
     await updateConfig("chatbot_backend", "gemini");
     await updateConfig("gemini_model", "gemini-2.5-flash");
     setSettingsUpdated(true);
-    // İstersen otomatik yapılandırma ekranına da gönderebilirsin:
-    // setPage("gemini_settings");
-    // setBreadcrumbs(breadcrumbs.concat([getLinkFromPage("gemini_settings")]));
   };
 
   const switchToQwenOllama = async () => {
-    // Backend'i ollama yap ve önerilen Qwen modelini ayarla
     setChatbotBackend("ollama");
     await updateConfig("chatbot_backend", "ollama");
     await updateConfig("ollama_model", "qwen3:8b");
     setSettingsUpdated(true);
-    // İstersen otomatik yapılandırma ekranına da gönderebilirsin:
-    // setPage("ollama_settings");
-    // setBreadcrumbs(breadcrumbs.concat([getLinkFromPage("ollama_settings")]));
   };
 
   return (
@@ -82,32 +67,30 @@ export function ChatbotBackendPage({
       description={t("Chatbot_Backend_desc", "Select the chatbot backend to use. Echo simply responds with what you type, it is used for testing and demonstration. ChatGPT is a commercial chatbot API from OpenAI, however there are multiple compatible API providers which can be used in lieu of OpenAI. LLama.cpp is a free and open source chatbot backend.")}
     >
       <ul role="list" className="divide-y divide-gray-100 max-w-xs">
-        {/* Hızlı Geçiş Butonları */}
         <li className="py-4">
-          <FormRow label={t("Hızlı Geçiş")}>
+          <FormRow label={t("Quick Switch")}>
             <div className="mt-2 flex flex-col gap-2">
               <button
                 type="button"
                 className="rounded bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 onClick={switchToGemini}
               >
-                {t("Gemini 2.5 Flash’a geç")}
+                {t("Switch to Gemini 2.5 Flash")}
               </button>
               <button
                 type="button"
                 className="rounded bg-gray-700 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-700"
                 onClick={switchToQwenOllama}
               >
-                {t("Qwen3:8b (Ollama)’ya geç")}
+                {t("Switch to Qwen3:8b (Ollama)")}
               </button>
               <div className="text-[11px] text-gray-500">
-                {t("Şu an seçili")}: <span className="font-semibold">{t(idToTitle(chatbotBackend))}</span>
+                {t("Currently selected")}: <span className="font-semibold">{t(idToTitle(chatbotBackend))}</span>
               </div>
             </div>
           </FormRow>
         </li>
 
-        {/* Mevcut dropdown ile ayrıntılı seçim */}
         <li className="py-4">
           <FormRow label={t("Chatbot Backend")}>
             <select
@@ -126,7 +109,7 @@ export function ChatbotBackendPage({
           </FormRow>
         </li>
 
-        { ["arbius_llm", "chatgpt", "llamacpp", "ollama", "koboldai", "moshi", "gemini"].includes(chatbotBackend) && (
+        { ["ollama", "gemini"].includes(chatbotBackend) && (
           <li className="py-4">
             <FormRow label={`${t("Configure")} ${t(idToTitle(chatbotBackend))}`}>
               <button

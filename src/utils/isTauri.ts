@@ -1,2 +1,3 @@
-export const isTauri = (): boolean => typeof(window) !== 'undefined' && window.hasOwnProperty('__TAURI__');
-export default isTauri;
+export function isTauri(): boolean {
+  return typeof window !== 'undefined' && '__TAURI__' in window;
+}

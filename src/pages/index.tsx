@@ -20,13 +20,14 @@ import {
   VideoCameraSlashIcon,
   WrenchScrewdriverIcon,
   SignalIcon,
+  LanguageIcon,
 } from "@heroicons/react/24/outline";
 import { IconBrain } from '@tabler/icons-react';
 
 import { MenuButton } from "@/components/menuButton";
 import { AssistantText } from "@/components/assistantText";
 import { SubconciousText } from "@/components/subconciousText";
-import { AddToHomescreen } from "@/components/addToHomescreen";
+
 import { Alert } from "@/components/alert";
 import { UserText } from "@/components/userText";
 import { ChatLog } from "@/components/chatLog";
@@ -51,7 +52,6 @@ import { AmicaLifeContext } from "@/features/amicaLife/amicaLifeContext";
 import { ChatModeText } from "@/components/chatModeText";
 
 import { TimestampedPrompt } from "@/features/amicaLife/eventHandler";
-import { handleChatLogs } from "@/features/externalAPI/externalAPI";
 import { VerticalSwitchBox } from "@/components/switchBox";
 import { ThoughtText } from "@/components/thoughtText";
 
@@ -110,10 +110,26 @@ export default function Home() {
     }
     setShowArbiusIntroduction(config("show_arbius_introduction") === 'true');
 
-    if (config("bg_color") !== '') {
-      document.body.style.backgroundColor = config("bg_color");
+    // Set background image
+    const bgUrl = config("bg_url");
+    const bgColor = config("bg_color");
+    
+    console.log('Background URL:', bgUrl);
+    console.log('Background Color:', bgColor);
+    
+    document.body.style.backgroundImage = `url(${bgUrl})`;
+    document.body.style.backgroundSize = 'cover';
+    document.body.style.backgroundPosition = 'center';
+    document.body.style.backgroundRepeat = 'no-repeat';
+    document.body.style.backgroundAttachment = 'fixed';
+    
+    // If bg_color is set, use it as overlay, otherwise transparent
+    if (bgColor && bgColor !== '') {
+      console.log('Setting background color:', bgColor);
+      document.body.style.backgroundColor = bgColor;
     } else {
-      document.body.style.backgroundImage = `url(${config("bg_url")})`;
+      console.log('Setting transparent background');
+      document.body.style.backgroundColor = 'transparent';
     }
   }, [muted]);
 
@@ -185,10 +201,6 @@ export default function Home() {
   }, [amicaLife, bot, viewer, chatSpeaking]);
 
   useEffect(() => {
-    handleChatLogs(chatLog);
-  }, [chatLog]);
-
-  useEffect(() => {
     setShowContent(true);
   }, []);
 
@@ -218,7 +230,8 @@ export default function Home() {
         </div>
       )}
 
-      <Introduction open={config("show_introduction") === 'true'} />
+      {/* Introduction kapatıldı */}
+      {/* <Introduction open={config("show_introduction") === 'true'} /> */}
       <ArbiusIntroduction open={showArbiusIntroduction} close={() => setShowArbiusIntroduction(false)} />
 
       <LoadingProgress />
@@ -230,6 +243,32 @@ export default function Home() {
       <VrmStoreProvider>
         <VrmViewer chatMode={showChatMode} />
       </VrmStoreProvider>
+
+      {/* Top right buttons */}
+      <div className="fixed top-4 right-4 z-50 flex flex-col gap-2">
+        {/* Settings Button */}
+        <a
+          href="/settings"
+          className="group"
+          title="Settings"
+        >
+          <div className="bg-emerald-500/30 hover:bg-emerald-500/50 backdrop-blur-md p-3 rounded-full shadow-lg hover:shadow-emerald-500/50 transition-all duration-300 transform hover:scale-110 border border-emerald-400/30">
+            <WrenchScrewdriverIcon className="h-6 w-6 text-emerald-300" />
+          </div>
+        </a>
+
+        {/* Language Switcher */}
+        <button
+          onClick={() => {
+            const newLang = i18n.language === 'en' ? 'tr' : 'en';
+            i18n.changeLanguage(newLang);
+          }}
+          className="bg-emerald-500/30 hover:bg-emerald-500/50 backdrop-blur-md p-3 rounded-full shadow-lg hover:shadow-emerald-500/50 transition-all duration-300 transform hover:scale-110 border border-emerald-400/30"
+          title={i18n.language === 'en' ? 'Türkçe\'ye geç' : 'Switch to English'}
+        >
+          <LanguageIcon className="h-6 w-6 text-emerald-300" />
+        </button>
+      </div>
 
       <MessageInputContainer isChatProcessing={chatProcessing} />
 
@@ -373,7 +412,6 @@ export default function Home() {
       {/* Subconcious stored prompt text */}
       {showSubconciousText && <SubconciousText messages={subconciousLogs} />}
 
-      <AddToHomescreen />
       <Alert />
     </div>
   );

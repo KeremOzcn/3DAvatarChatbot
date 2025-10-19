@@ -1,50 +1,20 @@
 import { Queue } from "typescript-collections";
-import { Message, Role, Screenplay, Talk, textsToScreenplay } from "./messages";
+import { Message, Role, Screenplay, Talk } from "./messages";
 import { Viewer } from "@/features/vrmViewer/viewer";
 import { Alert } from "@/features/alert/alert";
 
-import { getEchoChatResponseStream } from "./echoChat";
-import {
-  getArbiusChatResponseStream,
-} from "./arbiusChat";
-import {
-  getOpenAiChatResponseStream,
-  getOpenAiVisionChatResponse,
-} from "./openAiChat";
-import {
-  getLlamaCppChatResponseStream,
-  getLlavaCppChatResponse,
-} from "./llamaCppChat";
-import { getWindowAiChatResponseStream } from "./windowAiChat";
-import {
-  getOllamaChatResponseStream,
-  getOllamaVisionChatResponse,
-} from "./ollamaChat";
-import { getKoboldAiChatResponseStream } from "./koboldAiChat";
-import { getReasoingEngineChatResponseStream } from "./reasoiningEngineChat";
+import { getOllamaChatResponseStream } from "./ollamaChat";
 
-import { rvc } from "@/features/rvc/rvc";
-import { coquiLocal } from "@/features/coquiLocal/coquiLocal";
-import { piper } from "@/features/piper/piper";
 import { elevenlabs } from "@/features/elevenlabs/elevenlabs";
-import { speecht5 } from "@/features/speecht5/speecht5";
-import { openaiTTS } from "@/features/openaiTTS/openaiTTS";
-import { localXTTSTTS } from "@/features/localXTTS/localXTTS";
-import { kokoro } from "../kokoro/kokoro";
 
 import { AmicaLife } from "@/features/amicaLife/amicaLife";
 
-import { config, updateConfig } from "@/utils/config";
+import { config } from "@/utils/config";
 import { cleanTalk } from "@/utils/cleanTalk";
 import { processResponse } from "@/utils/processResponse";
 import { wait } from "@/utils/wait";
-import isDev from '@/utils/isDev';
 
 import { isCharacterIdle, characterIdleTime, resetIdleTimer } from "@/utils/isIdle";
-import { getOpenRouterChatResponseStream } from './openRouterChat';
-import { handleUserInput } from '../externalAPI/externalAPI';
-import { loadVRMAnimation } from '@/lib/VRMAnimation/loadVRMAnimation';
-// EKLENDİ: Gemini stream import'u
 import { getGeminiChatResponseStream } from "./geminiChat";
 
 type Speak = {
@@ -156,38 +126,11 @@ export class Chat {
   public setMessageList(messages: Message[]) {
     this.messageList = messages;
     this.currentAssistantMessage = "";
-       this.currentUserMessage = "";
+    this.currentUserMessage = "";
     this.setChatLog!(this.messageList!);
     this.setAssistantMessage!(this.currentAssistantMessage);
     this.setUserMessage!(this.currentAssistantMessage);
     this.currentStreamIdx++;
-  }
-
-  public async handleRvc(audio: any) {
-    const rvcModelName = config("rvc_model_name");
-    const rvcIndexPath = config("rvc_index_path");
-    const rvcF0upKey = parseInt(config("rvc_f0_upkey"));
-    const rvcF0Method = config("rvc_f0_method");
-    const rvcIndexRate = config("rvc_index_rate");
-    const rvcFilterRadius = parseInt(config("rvc_filter_radius"));
-    const rvcResampleSr = parseInt(config("rvc_resample_sr"));
-    const rvcRmsMixRate = parseInt(config("rvc_rms_mix_rate"));
-    const rvcProtect = parseInt(config("rvc_protect"));
-
-    const voice = await rvc(
-      audio,
-      rvcModelName,
-      rvcIndexPath,
-      rvcF0upKey,
-      rvcF0Method,
-      rvcIndexRate,
-      rvcFilterRadius,
-      rvcResampleSr,
-      rvcRmsMixRate,
-      rvcProtect,
-    );
-
-    return voice.audio;
   }
 
   public idleTime(): number {
@@ -316,17 +259,6 @@ export class Chat {
 
         this.currentAssistantMessage = text;
         this.setAssistantMessage!(this.currentAssistantMessage);
-      } else if (config("chatbot_backend") === "moshi") {
-        if (this.currentAssistantMessage !== "") {
-          this.messageList!.push({
-            role: "assistant",
-            content: this.currentAssistantMessage,
-          });
-        }
-        this.currentAssistantMessage = text;
-        this.setAssistantMessage!(this.currentAssistantMessage);
-        this.setUserMessage!("");
-
       } else {
         this.currentAssistantMessage += text;
         this.setUserMessage!("");
@@ -389,9 +321,6 @@ export class Chat {
     if (!amicaLife) {
       console.log("receiveMessageFromUser", message);
 
-      // For external API
-      await handleUserInput(message);
-
       this.amicaLife?.receiveMessageFromUser(message);
 
       if (!/\[.*?\]/.test(message)) {
@@ -414,9 +343,10 @@ export class Chat {
   }
 
   public initSSE() {
-    if (!isDev || config("external_api_enabled") !== "true") {
-      return;
-    }  
+    // External API disabled
+    return;
+
+    /* SSE functionality disabled
     // Close existing SSE connection if it exists
     this.closeSSE();
 
@@ -505,15 +435,16 @@ export class Chat {
       this.eventSource?.close();
       setTimeout(this.initSSE, 500);
     };
+    */
   }
 
   public closeSSE() {
     if (this.eventSource) {
-        console.log("Closing existing SSE connection...");
-        this.eventSource.close();
-        this.eventSource = null;
+      console.log("Closing existing SSE connection...");
+      this.eventSource.close();
+      this.eventSource = null;
     }
-}
+  }
 
   public async makeAndHandleStream(messages: Message[]) {
     try {
@@ -596,11 +527,11 @@ export class Chat {
                 screenplay: aiTalks[0],
                 streamIdx: streamIdx,
               });
-            } 
+            }
 
             // thought bubble
             this.thoughtBubbleMessage(isThinking, aiTalks[0].text);
-            
+
             if (!firstSentenceEncountered) {
               console.timeEnd("performance_time_to_first_sentence");
               firstSentenceEncountered = true;
@@ -647,8 +578,6 @@ export class Chat {
       return null;
     }
 
-    const rvcEnabled = config("rvc_enabled") === "true";
-
     try {
       switch (config("tts_backend")) {
         case "none": {
@@ -657,47 +586,7 @@ export class Chat {
         case "elevenlabs": {
           const voiceId = config("elevenlabs_voiceid");
           const voice = await elevenlabs(talk.message, voiceId, talk.style);
-          if (rvcEnabled) {
-            return await this.handleRvc(voice);
-          }
           return voice;
-        }
-        case "speecht5": {
-          const speakerEmbeddingUrl = config("speecht5_speaker_embedding_url");
-          const voice = await speecht5(talk.message, speakerEmbeddingUrl);
-          if (rvcEnabled) {
-            return await this.handleRvc(voice.audio);
-          }
-          return voice.audio;
-        }
-        case "openai_tts": {
-          const voice = await openaiTTS(talk.message);
-          if (rvcEnabled) {
-            return await this.handleRvc(voice.audio);
-          }
-          return voice.audio;
-        }
-        case "localXTTS": {
-          const voice = await localXTTSTTS(talk.message);
-          if (rvcEnabled) {
-            return await this.handleRvc(voice.audio);
-          }
-          return voice.audio;
-        }
-        case "piper": {
-          const voice = await piper(talk.message);
-          if (rvcEnabled) {
-            return await this.handleRvc(voice.audio);
-          }
-          return voice.audio;
-        }
-        case "coquiLocal": {
-          const voice = await coquiLocal(talk.message);
-          return voice.audio;
-        }
-        case "kokoro": {
-          const voice = await kokoro(talk.message);
-          return voice.audio;
         }
       }
     } catch (e: any) {
@@ -712,107 +601,14 @@ export class Chat {
     console.debug("getChatResponseStream", messages);
     const chatbotBackend = config("chatbot_backend");
 
-    // Extract the system prompt and convo messages
-    const systemPrompt = messages.find((msg) => msg.role === "system")!;
-    const conversationMessages = messages.filter((msg) => msg.role !== "system");
-
-    if (config("reasoning_engine_enabled") === "true") {
-      return getReasoingEngineChatResponseStream(systemPrompt, conversationMessages)
-    } 
-
     switch (chatbotBackend) {
-      case "arbius_llm":
-        return getArbiusChatResponseStream(messages);
-      // EKLENDİ: openai anahtarını da OpenAI yoluna yönlendir
-      case "openai":
-      case "chatgpt":
-        return getOpenAiChatResponseStream(messages);
-      case "llamacpp":
-        return getLlamaCppChatResponseStream(messages);
-      case "windowai":
-        return getWindowAiChatResponseStream(messages);
       case "ollama":
         return getOllamaChatResponseStream(messages);
-      case "koboldai":
-        return getKoboldAiChatResponseStream(messages);
-      case 'openrouter':
-        return getOpenRouterChatResponseStream(messages);
-      // EKLENDİ: gemini anahtarı için Gemini yoluna yönlendir
       case "gemini":
         return getGeminiChatResponseStream(messages);
-    }
-
-    return getEchoChatResponseStream(messages);
-  }
-
-  public async getVisionResponse(imageData: string) {
-    try {
-      const visionBackend = config("vision_backend");
-
-      console.debug("vision_backend", visionBackend);
-
-      let res = "";
-      if (visionBackend === "vision_llamacpp") {
-        const messages: Message[] = [
-          { role: "system", content: config("vision_system_prompt") },
-          ...this.messageList!,
-          {
-            role: "user",
-            content: "Describe the image as accurately as possible",
-          },
-        ];
-
-        res = await getLlavaCppChatResponse(messages, imageData);
-      } else if (visionBackend === "vision_ollama") {
-        const messages: Message[] = [
-          { role: "system", content: config("vision_system_prompt") },
-          ...this.messageList!,
-          {
-            role: "user",
-            content: "Describe the image as accurately as possible",
-          },
-        ];
-
-        res = await getOllamaVisionChatResponse(messages, imageData);
-      } else if (visionBackend === "vision_openai") {
-        const messages: Message[] = [
-          { role: "user", content: config("vision_system_prompt") },
-          ...this.messageList! as any[],
-          {
-            role: "user",
-            // @ts-ignore normally this is a string
-            content: [
-              {
-                type: "text",
-                text: "Describe the image as accurately as possible",
-              },
-              {
-                type: "image_url",
-                image_url: {
-                  url: `data:image/jpeg;base64,${imageData}`,
-                },
-              },
-            ],
-          },
-        ];
-
-        res = await getOpenAiVisionChatResponse(messages);
-      } else {
-        console.warn("vision_backend not supported", visionBackend);
-        return;
-      }
-
-      await this.makeAndHandleStream([
-        { role: "system", content: config("system_prompt") },
-        ...this.messageList!,
-        {
-          role: "user",
-          content: `This is a picture I just took from my webcam (described between [[ and ]] ): [[${res}]] Please respond accordingly and as if it were just sent and as though you can see it.`,
-        },
-      ]);
-    } catch (e: any) {
-      console.error("getVisionResponse", e.toString());
-      this.alert?.error("Failed to get vision response", e.toString());
+      default:
+        throw new Error(`Unsupported chatbot backend: ${chatbotBackend}`);
     }
   }
+
 }

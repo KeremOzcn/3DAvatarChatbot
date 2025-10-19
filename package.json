@@ -1,6 +1,25 @@
 {
-  "name": "amica",
-  "version": "0.1.0",
+  "name": "aisg-3d-chatbot",
+  "version": "1.0.0",
+  "description": "AI for Social Goods Club - 3D Avatar Chatbot with VRM support, multi-language, and AI integration",
+  "author": "AI for Social Goods Club - Istanbul University",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YOUR_USERNAME/aisg-3d-chatbot.git"
+  },
+  "keywords": [
+    "3d-avatar",
+    "chatbot",
+    "vrm",
+    "ai",
+    "nextjs",
+    "threejs",
+    "gemini",
+    "ollama",
+    "elevenlabs",
+    "whisper"
+  ],
   "private": true,
   "scripts": {
     "dev": "npm run generate:paths && npm run build:workers && next dev",

@@ -1,117 +1,57 @@
 import { useEffect, useRef, useState } from "react";
 import { clsx } from "clsx";
-import { config } from "@/utils/config";
 import { IconButton } from "./iconButton";
-import { useTranslation } from "react-i18next";
 import { Message } from "@/features/chat/messages";
 
 export const ChatModeText = ({ messages }: { messages: Message[] }) => {
-    const chatScrollRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [unlimited, setUnlimited] = useState(false);
 
-    useEffect(() => {
-        chatScrollRef.current?.scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-        });
-    }, [messages]);
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "end",
+    });
+  }, [messages]);
 
-    return (
-        <div className="fixed bottom-0 w-full h-[90%] mb-20 flex flex-col justify-end">
-            <div className="w-full h-full overflow-y-auto flex flex-col-reverse">
-
-                <div className="w-full max-w-full mx-auto px-4 md:px-16 flex flex-col">
-                    {messages.map((msg, i) => {
-                        return (
-                            <div key={i} ref={messages.length - 1 === i ? chatScrollRef : null}>
-                                <Chat
-                                    role={msg.role}
-                                    message={(msg.content as string).replace(/\[(.*?)\]/g, "")}
-                                    num={i}
-                                />
-                            </div>
-                        );
-                    })}
-                </div>
+  return (
+    <div className="fixed bottom-0 left-0 mb-20 w-full">
+      <div className="mx-auto max-w-4xl w-full px-4 md:px-16">
+        <div className="backdrop-blur-lg rounded-lg">
+          <div className="bg-white/70 rounded-lg backdrop-blur-lg shadow-lg">
+            <div className="px-8 pr-1 py-3 bg-blue-600/90 rounded-t-lg text-white font-bold tracking-wider">
+              <span className="p-4 bg-blue-700/80 rounded-lg rounded-tl-none rounded-tr-none shadow-sm">
+                CHAT MODE
+              </span>
+              <IconButton
+                iconName="24/FrameSize"
+                className="bg-transparent hover:bg-transparent active:bg-transparent disabled:bg-transparent float-right"
+                isProcessing={false}
+                onClick={() => setUnlimited(!unlimited)}
+              />
             </div>
-        </div>
-
-    );
-};
-
-function Chat({
-    role,
-    message,
-    num,
-}: {
-    role: string;
-    message: string;
-    num: number;
-}) {
-    const { t } = useTranslation();
-    const scrollRef = useRef<HTMLDivElement>(null);
-    const [unlimited, setUnlimited] = useState(false);
-
-    // useEffect(() => {
-    //     scrollRef.current?.scrollIntoView({
-    //         behavior: "smooth",
-    //         block: "center",
-    //     });
-    // });
-
-    return (
-        <div className={clsx(
-            'mx-auto max-w-4xl my-2',
-            role === "assistant" ? "pr-10 sm:pr-20" : "pl-10 sm:pl-20",
-        )}>
-            <div className="backdrop-blur-lg rounded-lg">
-                <div className="shadow-lg backdrop-blur-lg rounded-lg bg-white/70">
-
-                    <div className={clsx(
-                        'pr-1 py-3 bg-rose/90 rounded-t-lg text-white font-bold tracking-wider',
-                        role === "assistant" ? "px-8" : "px-8",
-                    )}>
-                        <span className={clsx(
-                            "p-4 rounded-lg rounded-tl-none rounded-tr-none shadow-sm",
-                            role === "assistant" ? "bg-pink-600/80" : "bg-cyan-600/80",
-                        )}>
-                            {role === "assistant" && config('name').toUpperCase()}
-                            {role === "user" && t("YOU")}
-                        </span>
-
-                        {role === "assistant" && (
-                            <IconButton
-                                iconName="24/FrameSize"
-                                className="bg-transparent hover:bg-transparent active:bg-transparent disabled:bg-transparent float-right"
-                                isProcessing={false}
-                                onClick={() => setUnlimited(!unlimited)}
-                            />
-
-                        )}
+            <div className={clsx(
+              "px-8 py-4 overflow-y-auto",
+              unlimited ? 'max-h-[calc(75vh)]' : 'max-h-64',
+            )}>
+              <div className="min-h-8 max-h-full text-gray-700 typography-14 space-y-3">
+                {messages.map((msg, index) => (
+                  <div key={index} className={clsx(
+                    "p-3 rounded-lg",
+                    msg.role === "user" ? "bg-blue-100" : "bg-gray-100"
+                  )}>
+                    <div className="font-bold text-xs mb-1 uppercase">
+                      {msg.role}
                     </div>
-                    {role === "assistant" && (
-                        <div className={clsx(
-                            "px-8 py-4 overflow-y-auto",
-                            unlimited ? 'max-h-32' : 'max-h-[calc(75vh)]',
-                        )}>
-                            <div className="min-h-8 max-h-full typography-16 font-bold text-gray-600">
-                                {message.replace(/\[([a-zA-Z]*?)\]/g, "")}
-                                <div ref={scrollRef} />
-                            </div>
-                        </div>
-                    )}
-                    {role === "user" && (
-                        <div className="px-8 py-4 max-h-32 overflow-y-auto">
-                            <div className="min-h-8 max-h-full typography-16 font-bold text-gray-600">
-                                {message.replace(/\[([a-zA-Z]*?)\]/g, "")}
-                                <div ref={scrollRef} />
-                            </div>
-                        </div>
-                    )}
-                </div>
+                    <div>{msg.content}</div>
+                  </div>
+                ))}
+                <div ref={scrollRef} />
+              </div>
             </div>
-
-
+          </div>
         </div>
-
-    );
-}
+      </div>
+    </div>
+  );
+};

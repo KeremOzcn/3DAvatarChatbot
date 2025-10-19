@@ -3,10 +3,12 @@
 @tailwind utilities;
 
 body {
-  background-position: top center;
-  background-attachment: fixed;
-  background-size: cover;
-  background-repeat: no-repeat;
+  background-image: url('/newBG.png') !important;
+  background-position: center !important;
+  background-attachment: fixed !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+  background-color: transparent !important;
 }
 
 @layer utilities {

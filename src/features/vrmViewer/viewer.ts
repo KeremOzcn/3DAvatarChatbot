@@ -29,8 +29,6 @@ import { loadVRMAnimation } from "@/lib/VRMAnimation/loadVRMAnimation";
 import { loadMixamoAnimation } from "@/lib/VRMAnimation/loadMixamoAnimation";
 import { config } from "@/utils/config";
 
-import { XRControllerModelFactory } from "./XRControllerModelFactory";
-import { XRHandModelFactory } from "./XRHandModelFactory";
 import { Model } from "./model";
 import { Room } from "./room";
 
@@ -339,34 +337,35 @@ export class Viewer {
         this.usingController2 = true;
       });
 
-      const controllerModelFactory = new XRControllerModelFactory();
+      // XR Controller and Hand Models disabled
+      // const controllerModelFactory = new XRControllerModelFactory();
 
       const controllerGrip1 = renderer.xr.getControllerGrip(0);
       this.controllerGrip1 = controllerGrip1;
 
-      controllerGrip1.add(
-        controllerModelFactory.createControllerModel(controllerGrip1),
-      );
+      // controllerGrip1.add(
+      //   controllerModelFactory.createControllerModel(controllerGrip1),
+      // );
       scene.add(controllerGrip1);
 
       const controllerGrip2 = renderer.xr.getControllerGrip(1);
       this.controllerGrip2 = controllerGrip2;
 
-      controllerGrip2.add(
-        controllerModelFactory.createControllerModel(controllerGrip2),
-      );
+      // controllerGrip2.add(
+      //   controllerModelFactory.createControllerModel(controllerGrip2),
+      // );
       scene.add(controllerGrip2);
 
-      const handModelFactory = new XRHandModelFactory();
+      // const handModelFactory = new XRHandModelFactory();
 
       const hand1 = renderer.xr.getHand(0);
       this.hand1 = hand1;
-      this.hand1.add(handModelFactory.createHandModel(this.hand1, "mesh"))
+      // this.hand1.add(handModelFactory.createHandModel(this.hand1, "mesh"))
       scene.add(hand1);
 
       const hand2 = renderer.xr.getHand(1);
       this.hand2 = hand2;
-      this.hand2.add(handModelFactory.createHandModel(this.hand2, "mesh"))
+      // this.hand2.add(handModelFactory.createHandModel(this.hand2, "mesh"))
       scene.add(hand2);
 
       // @ts-ignore

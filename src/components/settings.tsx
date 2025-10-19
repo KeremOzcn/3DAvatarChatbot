@@ -26,52 +26,25 @@ import { Link } from "./settings/common";
 import { MenuPage } from "./settings/MenuPage";
 import { LanguagePage } from "./settings/LanguagePage";
 import { ResetSettingsPage } from "./settings/ResetSettingsPage";
-import { DeveloperPage } from "./settings/DeveloperPage";
-import { CommunityPage } from "./settings/CommunityPage";
 
 import { BackgroundImgPage } from "./settings/BackgroundImgPage";
-import { BackgroundColorPage } from "./settings/BackgroundColorPage";
 import { BackgroundVideoPage } from "./settings/BackgroundVideoPage";
 import { CharacterModelPage } from "./settings/CharacterModelPage";
 import { CharacterAnimationPage } from "./settings/CharacterAnimationPage";
 
 import { ChatbotBackendPage } from "./settings/ChatbotBackendPage";
-import { ArbiusLLMSettingsPage } from "./settings/ArbiusLLMSettingsPage";
-import { ChatGPTSettingsPage } from "./settings/ChatGPTSettingsPage";
-import { LlamaCppSettingsPage } from "./settings/LlamaCppSettingsPage";
 import { OllamaSettingsPage } from "./settings/OllamaSettingsPage";
-import { KoboldAiSettingsPage } from "./settings/KoboldAiSettingsPage";
-import { MoshiSettingsPage } from "./settings/MoshiSettingsPage";
-import { GeminiSettingsPage } from "./settings/GeminiSettingsPage"; // ekle
+import { GeminiSettingsPage } from "./settings/GeminiSettingsPage";
 
 import { TTSBackendPage } from "./settings/TTSBackendPage";
 import { ElevenLabsSettingsPage } from "./settings/ElevenLabsSettingsPage";
-import { SpeechT5SettingsPage } from "./settings/SpeechT5SettingsPage";
-import { OpenAITTSSettingsPage } from "./settings/OpenAITTSSettingsPage";
-import { PiperSettingsPage } from "./settings/PiperSettingsPage";
-import { CoquiLocalSettingsPage } from "./settings/CoquiLocalSettingsPage";
-import { LocalXTTSSettingsPage } from "./settings/LocalXTTSSettingsPage";
-
-import { RVCSettingsPage } from "./settings/RVCSettingsPage";
 
 import { STTBackendPage } from "./settings/STTBackendPage";
 import { STTWakeWordSettingsPage } from "./settings/STTWakeWordSettingsPage";
-
-import { WhisperOpenAISettingsPage } from "./settings/WhisperOpenAISettingsPage";
 import { WhisperCppSettingsPage } from "./settings/WhisperCppSettingsPage";
-
-import { VisionBackendPage } from "./settings/VisionBackendPage";
-import { VisionLlamaCppSettingsPage } from "./settings/VisionLlamaCppSettingsPage";
-import { VisionOllamaSettingsPage } from "./settings/VisionOllamaSettingsPage";
-import { VisionOpenAISettingsPage } from "./settings/VisionOpenAISettingsPage";
-import { VisionSystemPromptPage } from "./settings/VisionSystemPromptPage";
 
 import { NamePage } from "./settings/NamePage";
 import { SystemPromptPage } from "./settings/SystemPromptPage";
-import { AmicaLifePage } from "./settings/AmicaLifePage";
-import { OpenRouterSettings } from "./settings/OpenRouterSettingsPage";
-import { ExternalAPIPage } from "./settings/ExternalAPIPage";
-import { KokoroSettingsPage } from "./settings/KokoroSettingsPage";
 
 export interface SettingsProps {
   onClickClose: () => void;
@@ -460,16 +433,11 @@ export const Settings: React.FC<SettingsProps> = ({
           <MenuPage
             keys={[
               "appearance",
-              "amica_life",
               "chatbot",
               "language",
               "tts",
               "stt",
-              "vision",
-              "developer",
-              "external_api",
               "reset_settings",
-              "community",
             ]}
             menuClick={handleMenuClick}
           />
@@ -480,7 +448,6 @@ export const Settings: React.FC<SettingsProps> = ({
           <MenuPage
             keys={[
               "background_img",
-              "background_color",
               "background_video",
               "character_model",
               "character_animation",
@@ -496,13 +463,8 @@ export const Settings: React.FC<SettingsProps> = ({
               "chatbot_backend",
               "name",
               "system_prompt",
-              "arbius_llm_settings",
-              "chatgpt_settings",
-              "llamacpp_settings",
               "ollama_settings",
-              "koboldai_settings",
-              "moshi_settings",
-              "openrouter_settings",
+              "gemini_settings",
             ]}
             menuClick={handleMenuClick}
           />
@@ -517,13 +479,6 @@ export const Settings: React.FC<SettingsProps> = ({
             keys={[
               "tts_backend",
               "elevenlabs_settings",
-              "speecht5_settings",
-              "coquiLocal_settings",
-              "openai_tts_settings",
-              "piper_settings",
-              "localXTTS_settings",
-              "kokoro_settings",
-              "rvc_settings",
             ]}
             menuClick={handleMenuClick}
           />
@@ -535,22 +490,7 @@ export const Settings: React.FC<SettingsProps> = ({
             keys={[
               "stt_backend",
               "stt_wake_word",
-              "whisper_openai_settings",
               "whispercpp_settings",
-            ]}
-            menuClick={handleMenuClick}
-          />
-        );
-
-      case "vision":
-        return (
-          <MenuPage
-            keys={[
-              "vision_backend",
-              "vision_llamacpp_settings",
-              "vision_ollama_settings",
-              "vision_openai_settings",
-              "vision_system_prompt",
             ]}
             menuClick={handleMenuClick}
           />
@@ -559,24 +499,6 @@ export const Settings: React.FC<SettingsProps> = ({
       case "reset_settings":
         return <ResetSettingsPage />;
 
-      case "developer":
-        return (
-          <DeveloperPage
-            debugGfx={debugGfx}
-            setDebugGfx={setDebugGfx}
-            mtoonDebugMode={mtoonDebugMode}
-            setMtoonDebugMode={setMtoonDebugMode}
-            mtoonMaterialType={mtoonMaterialType}
-            setMtoonMaterialType={setMtoonMaterialType}
-            useWebGPU={useWebGPU}
-            setUseWebGPU={setUseWebGPU}
-            setSettingsUpdated={setSettingsUpdated}
-          />
-        );
-
-      case "community":
-        return <CommunityPage />;
-
       case "background_img":
         return (
           <BackgroundImgPage
@@ -584,15 +506,6 @@ export const Settings: React.FC<SettingsProps> = ({
             setBgUrl={setBgUrl}
             setSettingsUpdated={setSettingsUpdated}
             handleClickOpenBgImgFile={handleClickOpenBgImgFile}
-          />
-        );
-
-      case "background_color":
-        return (
-          <BackgroundColorPage
-            bgColor={bgColor}
-            setBgColor={setBgColor}
-            setSettingsUpdated={setSettingsUpdated}
           />
         );
 
@@ -645,39 +558,6 @@ export const Settings: React.FC<SettingsProps> = ({
           />
         );
 
-      case "arbius_llm_settings":
-        return (
-          <ArbiusLLMSettingsPage
-            arbiusLLMModelId={arbiusLLMModelId}
-            setArbiusLLMModelId={setArbiusLLMModelId}
-            setSettingsUpdated={setSettingsUpdated}
-          />
-        );
-
-      case "chatgpt_settings":
-        return (
-          <ChatGPTSettingsPage
-            openAIApiKey={openAIApiKey}
-            setOpenAIApiKey={setOpenAIApiKey}
-            openAIUrl={openAIUrl}
-            setOpenAIUrl={setOpenAIUrl}
-            openAIModel={openAIModel}
-            setOpenAIModel={setOpenAIModel}
-            setSettingsUpdated={setSettingsUpdated}
-          />
-        );
-
-      case "llamacpp_settings":
-        return (
-          <LlamaCppSettingsPage
-            llamaCppUrl={llamaCppUrl}
-            setLlamaCppUrl={setLlamaCppUrl}
-            llamaCppStopSequence={llamaCppStopSequence}
-            setLlamaCppStopSequence={setLlamaCppStopSequence}
-            setSettingsUpdated={setSettingsUpdated}
-          />
-        );
-
       case "ollama_settings":
         return (
           <OllamaSettingsPage
@@ -685,41 +565,6 @@ export const Settings: React.FC<SettingsProps> = ({
             setOllamaUrl={setOllamaUrl}
             ollamaModel={ollamaModel}
             setOllamaModel={setOllamaModel}
-            setSettingsUpdated={setSettingsUpdated}
-          />
-        );
-
-      case "koboldai_settings":
-        return (
-          <KoboldAiSettingsPage
-            koboldAiUrl={koboldAiUrl}
-            setKoboldAiUrl={setKoboldAiUrl}
-            koboldAiUseExtra={koboldAiUseExtra}
-            setKoboldAiUseExtra={setKoboldAiUseExtra}
-            koboldAiStopSequence={koboldAiStopSequence}
-            setKoboldAiStopSequence={setKoboldAiStopSequence}
-            setSettingsUpdated={setSettingsUpdated}
-          />
-        );
-
-      case "moshi_settings":
-        return (
-          <MoshiSettingsPage
-            moshiUrl={moshiUrl}
-            setMoshiUrl={setMoshiUrl}
-            setSettingsUpdated={setSettingsUpdated}
-          />
-        );
-
-      case "openrouter_settings":
-        return (
-          <OpenRouterSettings
-            openRouterUrl={openRouterUrl}
-            setOpenRouterUrl={setOpenRouterUrl}
-            openRouterApiKey={openRouterApiKey}
-            setOpenRouterApiKey={setOpenRouterApiKey}
-            openRouterModel={openRouterModel}
-            setOpenRouterModel={setOpenRouterModel}
             setSettingsUpdated={setSettingsUpdated}
           />
         );
@@ -756,99 +601,6 @@ export const Settings: React.FC<SettingsProps> = ({
           />
         );
 
-      case "speecht5_settings":
-        return (
-          <SpeechT5SettingsPage
-            speechT5SpeakerEmbeddingsUrl={speechT5SpeakerEmbeddingsUrl}
-            setSpeechT5SpeakerEmbeddingsUrl={setSpeechT5SpeakerEmbeddingsUrl}
-            setSettingsUpdated={setSettingsUpdated}
-          />
-        );
-
-      case "openai_tts_settings":
-        return (
-          <OpenAITTSSettingsPage
-            openAITTSApiKey={openAITTSApiKey}
-            setOpenAITTSApiKey={setOpenAITTSApiKey}
-            openAITTSUrl={openAITTSUrl}
-            setOpenAITTSUrl={setOpenAITTSUrl}
-            openAITTSModel={openAITTSModel}
-            setOpenAITTSModel={setOpenAITTSModel}
-            openAITTSVoice={openAITTSVoice}
-            setOpenAITTSVoice={setOpenAITTSVoice}
-            setSettingsUpdated={setSettingsUpdated}
-          />
-        );
-
-      case "piper_settings":
-        return (
-          <PiperSettingsPage
-            piperUrl={piperUrl}
-            setPiperUrl={setPiperUrl}
-            setSettingsUpdated={setSettingsUpdated}
-          />
-        );
-
-      case "coquiLocal_settings":
-        return (
-          <CoquiLocalSettingsPage
-            coquiLocalUrl={coquiLocalUrl}
-            coquiLocalVoiceId={coquiLocalVoiceId}
-            setCoquiLocalVoiceId={setCoquiLocalVoiceId}
-            setCoquiLocalUrl={setCoquiLocalUrl}
-            setSettingsUpdated={setSettingsUpdated}
-          />
-        );
-
-      case "localXTTS_settings":
-        return (
-          <LocalXTTSSettingsPage
-            localXTTSUrl={localXTTSUrl}
-            setLocalXTTSUrl={setLocalXTTSUrl}
-            setSettingsUpdated={setSettingsUpdated}
-          />
-        );
-
-      case "kokoro_settings":
-        return (
-          <KokoroSettingsPage
-            kokoroUrl={kokoroUrl}
-            kokoroVoice={kokoroVoice}
-            setKokoroVoice={setKokoroVoice}
-            setKokoroUrl={setKokoroUrl}
-            setSettingsUpdated={setSettingsUpdated}
-          />
-        );
-
-      case "rvc_settings":
-        return (
-          <RVCSettingsPage
-            rvcUrl={rvcUrl}
-            rvcEnabled={rvcEnabled}
-            rvcModelName={rvcModelName}
-            rvcIndexPath={rvcIndexPath}
-            rvcF0upKey={rvcF0upKey}
-            rvcF0Method={rvcF0Method}
-            rvcIndexRate={rvcIndexRate}
-            rvcFilterRadius={rvcFilterRadius}
-            rvcResampleSr={rvcResampleSr}
-            rvcRmsMixRate={rvcRmsMixRate}
-            rvcProtect={rvcProtect}
-            setRvcUrl={setRvcUrl}
-            setRvcEnabled={setRvcEnabled}
-            setRvcModelName={setRvcModelName}
-            setRvcIndexPath={setRvcIndexPath}
-            setRvcF0upKey={setRvcF0UpKey}
-            setRvcF0Method={setRvcF0Method}
-            setRvcIndexRate={setRvcIndexRate}
-            setRvcFilterRadius={setRvcFilterRadius}
-            setRvcResampleSr={setRvcResampleSr}
-            setRvcRmsMixRate={setRvcRmsMixRate}
-            setRvcProtect={setRvcProtect}
-            setSettingsUpdated={setSettingsUpdated}
-          />
-        );
-
       case "stt_backend":
         return (
           <STTBackendPage
@@ -874,19 +626,6 @@ export const Settings: React.FC<SettingsProps> = ({
           />
         );
 
-      case "whisper_openai_settings":
-        return (
-          <WhisperOpenAISettingsPage
-            whisperOpenAIUrl={whisperOpenAIUrl}
-            setWhisperOpenAIUrl={setWhisperOpenAIUrl}
-            whisperOpenAIApiKey={whisperOpenAIApiKey}
-            setWhisperOpenAIApiKey={setWhisperOpenAIApiKey}
-            whisperOpenAIModel={whisperOpenAIModel}
-            setWhisperOpenAIModel={setWhisperOpenAIModel}
-            setSettingsUpdated={setSettingsUpdated}
-          />
-        );
-
       case "whispercpp_settings":
         return (
           <WhisperCppSettingsPage
@@ -908,48 +647,6 @@ export const Settings: React.FC<SettingsProps> = ({
           />
         );
 
-      case "vision_llamacpp_settings":
-        return (
-          <VisionLlamaCppSettingsPage
-            visionLlamaCppUrl={visionLlamaCppUrl}
-            setVisionLlamaCppUrl={setVisionLlamaCppUrl}
-            setSettingsUpdated={setSettingsUpdated}
-          />
-        );
-
-      case "vision_ollama_settings":
-        return (
-          <VisionOllamaSettingsPage
-            visionOllamaUrl={visionOllamaUrl}
-            setVisionOllamaUrl={setVisionOllamaUrl}
-            visionOllamaModel={visionOllamaModel}
-            setVisionOllamaModel={setVisionOllamaModel}
-            setSettingsUpdated={setSettingsUpdated}
-          />
-        );
-
-      case "vision_openai_settings":
-        return (
-          <VisionOpenAISettingsPage
-            visionOpenAIApiKey={visionOpenAIApiKey}
-            setVisionOpenAIApiKey={setVisionOpenAIApiKey}
-            visionOpenAIUrl={visionOpenAIUrl}
-            setVisionOpenAIUrl={setVisionOpenAIUrl}
-            visionOpenAIModel={visionOpenAIModel}
-            setVisionOpenAIModel={setVisionOpenAIModel}
-            setSettingsUpdated={setSettingsUpdated}
-          />
-        );
-
-      case "vision_system_prompt":
-        return (
-          <VisionSystemPromptPage
-            visionSystemPrompt={visionSystemPrompt}
-            setVisionSystemPrompt={setVisionSystemPrompt}
-            setSettingsUpdated={setSettingsUpdated}
-          />
-        );
-
       case "system_prompt":
         return (
           <SystemPromptPage
@@ -964,38 +661,6 @@ export const Settings: React.FC<SettingsProps> = ({
           <NamePage
             name={name}
             setName={setName}
-            setSettingsUpdated={setSettingsUpdated}
-          />
-        );
-
-      case "amica_life":
-        return (
-          <AmicaLifePage
-            amicaLifeEnabled={amicaLifeEnabled}
-            reasoningEngineEnabled={reasoningEngineEnabled}
-            reasoningEngineUrl={reasoningEngineUrl}
-            timeBeforeIdle={timeBeforeIdle}
-            minTimeInterval={minTimeInterval}
-            maxTimeInterval={maxTimeInterval}
-            timeToSleep={timeToSleep}
-            idleTextPrompt={idleTextPrompt}
-            setAmicaLifeEnabled={setAmicaLifeEnabled}
-            setReasoningEngineEnabled={setReasoningEngineEnabled}
-            setReasoningEngineUrl={setReasoningEngineUrl}
-            setTimeBeforeIdle={setTimeBeforeIdle}
-            setMinTimeInterval={setMinTimeInterval}
-            setMaxTimeInterval={setMaxTimeInterval}
-            setTimeToSleep={setTimeToSleep}
-            setIdleTextPrompt={setIdleTextPrompt}
-            setSettingsUpdated={setSettingsUpdated}
-          />
-        );
-
-      case "external_api":
-        return (
-          <ExternalAPIPage
-            externalApiEnabled={externalApiEnabled}
-            setExternalApiEnabled={setExternalApiEnabled}
             setSettingsUpdated={setSettingsUpdated}
           />
         );

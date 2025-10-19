@@ -4,8 +4,7 @@ import { ViewerContext } from "@/features/vrmViewer/viewerContext";
 import { buildUrl } from "@/utils/buildUrl";
 import { config } from "@/utils/config";
 import { useVrmStoreContext } from "@/features/vrmStore/vrmStoreContext";
-import isTauri from "@/utils/isTauri";
-import { invoke } from "@tauri-apps/api/tauri";
+import { isTauri } from "@/utils/isTauri";
 import { ChatContext } from "@/features/chat/chatContext";
 import clsx from "clsx";
 
@@ -52,14 +51,14 @@ export default function VrmViewer({ chatMode }: { chatMode: boolean }) {
               console.log("vrm loaded");
               setLoadingError(false);
               setIsLoading(false);
-              if (isTauri()) invoke("close_splashscreen");
+              // Tauri splashscreen handling removed
             }
           })
           .catch((e) => {
             console.error("vrm loading error", e);
             setLoadingError(true);
             setIsLoading(false);
-            if (isTauri()) invoke("close_splashscreen");
+            // Tauri splashscreen handling removed
           });
 
         // Replace VRM with Drag and Drop

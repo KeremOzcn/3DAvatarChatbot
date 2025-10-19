@@ -6,7 +6,7 @@ import { useTranslation, Trans } from 'react-i18next';
 export const Introduction = ({ open }: {
   open: boolean;
 }) => {
-  const [opened, setOpened] = useState(open);
+  const [opened, setOpened] = useState(false); // Her zaman kapalı başlasın
   const { t } = useTranslation();
 
   if (! opened) {
