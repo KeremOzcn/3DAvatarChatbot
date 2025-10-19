@@ -210,67 +210,125 @@ export default function MessageInput({
   }
 
   return (
-    <div className="fixed bottom-2 z-20 w-full">
-      <div className="mx-auto max-w-4xl p-2 backdrop-blur-lg border-0 rounded-lg">
-        <div className="grid grid-flow-col grid-cols-[min-content_1fr_min-content] gap-[8px]">
-          <div>
-            <div className='flex flex-col justify-center items-center'>
+    <div className="fixed bottom-4 z-20 w-full px-4">
+      <div className="mx-auto max-w-4xl">
+        <div className="bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-200/50 p-4">
+          <div className="flex items-center gap-3">
+            {/* Mikrofon Butonu */}
+            <div className="flex-shrink-0">
               {config("chatbot_backend") === "moshi" ? (
-                <IconButton
-                iconName={!moshiMuted ? "24/PauseAlt" : "24/Microphone"}
-                className="bg-secondary hover:bg-secondary-hover active:bg-secondary-press disabled:bg-secondary-disabled"
-                isProcessing={moshiMuted && moshi.getRecorder() != null}
-                disabled={!moshi.getRecorder()}
-                onClick={() => {
-                  moshi.toggleMute();
-                  setMoshiMuted(!moshiMuted);
-                }}
-              />
+                <button
+                  className={`
+                    relative w-14 h-14 rounded-full transition-all duration-300
+                    ${!moshiMuted 
+                      ? 'bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 shadow-lg shadow-red-500/50' 
+                      : 'bg-gradient-to-br from-secondary to-emerald-500 hover:from-emerald-500 hover:to-secondary shadow-lg shadow-secondary/50'
+                    }
+                    ${moshiMuted && moshi.getRecorder() != null ? 'animate-pulse-slow' : ''}
+                    disabled:opacity-50 disabled:cursor-not-allowed
+                    active:scale-95 transform
+                  `}
+                  disabled={!moshi.getRecorder()}
+                  onClick={() => {
+                    moshi.toggleMute();
+                    setMoshiMuted(!moshiMuted);
+                  }}
+                >
+                  <IconButton
+                    iconName={!moshiMuted ? "24/PauseAlt" : "24/Microphone"}
+                    className="bg-transparent hover:bg-transparent active:bg-transparent"
+                    isProcessing={moshiMuted && moshi.getRecorder() != null}
+                    disabled={!moshi.getRecorder()}
+                    onClick={() => {}}
+                  />
+                </button>
               ) : (
-                <IconButton
-                iconName={vad.listening ? "24/PauseAlt" : "24/Microphone"}
-                className="bg-secondary hover:bg-secondary-hover active:bg-secondary-press disabled:bg-secondary-disabled"
-                isProcessing={vad.userSpeaking}
-                disabled={config('stt_backend') === 'none' || vad.loading || Boolean(vad.errored)}
-                onClick={vad.toggle}
-              />
+                <button
+                  className={`
+                    relative w-14 h-14 rounded-full transition-all duration-300
+                    ${vad.listening 
+                      ? 'bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 shadow-lg shadow-red-500/50' 
+                      : 'bg-gradient-to-br from-secondary to-emerald-500 hover:from-emerald-500 hover:to-secondary shadow-lg shadow-secondary/50'
+                    }
+                    ${vad.userSpeaking ? 'animate-pulse-slow' : ''}
+                    disabled:opacity-50 disabled:cursor-not-allowed
+                    active:scale-95 transform
+                  `}
+                  disabled={config('stt_backend') === 'none' || vad.loading || Boolean(vad.errored)}
+                  onClick={vad.toggle}
+                >
+                  <IconButton
+                    iconName={vad.listening ? "24/PauseAlt" : "24/Microphone"}
+                    className="bg-transparent hover:bg-transparent active:bg-transparent"
+                    isProcessing={vad.userSpeaking}
+                    disabled={config('stt_backend') === 'none' || vad.loading || Boolean(vad.errored)}
+                    onClick={() => {}}
+                  />
+                </button>
               )}
             </div>
-          </div>
 
-          <input
-            type="text"
-            ref={inputRef}
-            placeholder={config("chatbot_backend") === "moshi" ? "Disabled in moshi chatbot" : "Write message here..."}
-            onChange={handleInputChange}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                if (hasOnScreenKeyboard()) {
-                  inputRef.current?.blur();
-                }
+            {/* Mesaj Input */}
+            <div className="flex-1">
+              <input
+                type="text"
+                ref={inputRef}
+                placeholder={config("chatbot_backend") === "moshi" ? "Moshi modunda devre dışı..." : "Mesajınızı yazın..."}
+                onChange={handleInputChange}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    if (hasOnScreenKeyboard()) {
+                      inputRef.current?.blur();
+                    }
 
-                if (userMessage === "") {
-                  return false;
-                }
+                    if (userMessage === "") {
+                      return false;
+                    }
 
-                clickedSendButton();
-              }
-            }}
-            disabled={config("chatbot_backend") === "moshi"}
+                    clickedSendButton();
+                  }
+                }}
+                disabled={config("chatbot_backend") === "moshi"}
+                className="
+                  w-full px-5 py-3.5 
+                  bg-gray-50 
+                  border-2 border-transparent
+                  rounded-xl
+                  text-gray-900 text-base
+                  placeholder:text-gray-400
+                  focus:outline-none focus:border-primary focus:bg-white
+                  disabled:bg-gray-100 disabled:cursor-not-allowed
+                  transition-all duration-200
+                "
+                value={userMessage}
+                autoComplete="off"
+              />
+            </div>
 
-            className="disabled block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-gray-400 sm:text-sm sm:leading-6"
-            value={userMessage}
-            autoComplete="off"
-          />
-
-          <div className='flex flex-col justify-center items-center'>
-            <IconButton
-              iconName="24/Send"
-              className="ml-2 bg-secondary hover:bg-secondary-hover active:bg-secondary-press disabled:bg-secondary-disabled"
-              isProcessing={isChatProcessing || transcriber.isBusy}
-              disabled={isChatProcessing || !userMessage || transcriber.isModelLoading || config("chatbot_backend") === "moshi"}
-              onClick={clickedSendButton}
-            />
+            {/* Gönder Butonu */}
+            <div className="flex-shrink-0">
+              <button
+                className={`
+                  relative w-14 h-14 rounded-full transition-all duration-300
+                  bg-gradient-to-br from-primary to-blue-600 
+                  hover:from-blue-600 hover:to-primary 
+                  shadow-lg shadow-primary/50
+                  disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none
+                  active:scale-95 transform
+                  ${(isChatProcessing || transcriber.isBusy) ? 'animate-pulse-slow' : ''}
+                `}
+                disabled={isChatProcessing || !userMessage || transcriber.isModelLoading || config("chatbot_backend") === "moshi"}
+                onClick={clickedSendButton}
+              >
+                <IconButton
+                  iconName="24/Send"
+                  className="bg-transparent hover:bg-transparent active:bg-transparent"
+                  isProcessing={isChatProcessing || transcriber.isBusy}
+                  disabled={isChatProcessing || !userMessage || transcriber.isModelLoading || config("chatbot_backend") === "moshi"}
+                  onClick={() => {}}
+                />
+              </button>
+            </div>
           </div>
         </div>
       </div>
