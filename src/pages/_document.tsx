@@ -5,9 +5,9 @@ import { GoogleAnalytics } from '@next/third-parties/google';
 import Script from 'next/script'
 
 export default function Document() {
-  const title = "Amica - Where Empathy Meets AI";
-  const description = "Amica is your personal 3D companion that can communicate via natural voice chat and vision, with an emotion engine that allows Amica to express feelings, complete tasks and engage on her own.";
-  const imageUrl = "https://amica.arbius.ai/ogp.png";
+  const title = "AI for Social Goods Club - 3D Avatar Chatbot";
+  const description = "Interactive 3D Avatar Chatbot with VRM support, multi-language (TR/EN), AI integration (Gemini/Ollama), voice recognition, and text-to-speech. Built by Istanbul University AI for Social Goods Club.";
+  const imageUrl = "/newlogo.png";
 
   return (
     <Html lang="en">
@@ -21,9 +21,9 @@ export default function Document() {
         <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={imageUrl} />
 
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=2" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=2" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=2" />
         <link rel="manifest" href="/site.webmanifest" />
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
         <meta name="apple-mobile-web-app-title" content={title} />

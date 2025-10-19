@@ -39,6 +39,7 @@
     "act": "act -j test",
     "tauri": "tauri",
     "generate:paths": "npx node scripts/generate_paths.js",
+    "generate:favicon": "node scripts/generate_favicon.js",
     "splash": "cp ./public/splashscreen.html out/"
   },
   "dependencies": {

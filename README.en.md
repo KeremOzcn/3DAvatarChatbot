@@ -14,7 +14,13 @@
 
 ---
 
-![Demo](https://via.placeholder.com/800x400/10b981/ffffff?text=3D+Avatar+Chatbot+Demo)
+## 🎬 Demo Video
+
+[![3D Avatar Chatbot Demo](https://img.youtube.com/vi/vTlst4BU0J0/maxresdefault.jpg)](https://youtu.be/vTlst4BU0J0)
+
+> 🎥 **[Click to watch the demo video!](https://youtu.be/vTlst4BU0J0)**
+
+---
 
 ## 🎯 Features
 
