@@ -1,0 +1,79 @@
+# --- Node / Paket Yönetimi ---
+node_modules/
+
+# --- Next.js / Build Artefaktları ---
+.next/
+out/
+dist/
+build/
+
+# --- Derleme / Cache / Geçici ---
+*.tsbuildinfo
+.cache/
+.parcel-cache/
+coverage/
+.vitest/
+.nyc_output/
+
+# --- Editor / OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# --- Loglar ---
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# --- Environment (bilerek minimal; privacy tercihine göre aç/kapat) ---
+# .env
+# .env.local
+# .env.*.local
+# Yukarıdaki satırları açarsan secret'lar commitlenmez.
+
+# --- Büyük / Üretilebilir Worker / Wasm (CI veya build script üretebiliyorsa) ---
+public/*.wasm
+public/*.bin
+public/generateMeshBVH.worker.js
+public/workbox-*.js
+public/sw.js
+
+# --- Büyük Asset Klasörleri (GENEL) ---
+# VRM, animations ve bg dosyaları artık dahil edilecek
+public/speecht5_speaker_embeddings/
+public/controllers/
+public/particles/
+public/room/
+public/scenarios/
+public/fonts/
+blobs/
+manifests/
+
+# --- Gerekli Temel Varlıkları GERİ DAHİL ET (negatif pattern) ---
+!public/site.webmanifest
+!public/splashscreen.html
+
+# (Eğer TTS embedding default olarak gerekiyorsa aç)
+!public/speecht5_speaker_embeddings/cmu_us_slt_arctic-wav-arctic_a0001.bin
+
+# --- Scriptler / Kaynak Kod (DAHİL OLMALI, ignore ETME) ---
+# scripts/  (bilerek ignore etmiyoruz)
+# src/      (ignore edilirse proje çalışmaz)
+# public/debugLogger.js  (küçük ve gerekli olabilir, ignore etmiyoruz)
+
+# --- Çeşitli ---
+*.pem
+*.key
+*.p12
+*.jks
+
+# --- Çalışma alanı / deneme klasörleri (istersen) ---
+# working/
+# Local development
+.env.local
+localhost*.har
+models/
+

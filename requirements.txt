@@ -1,0 +1,18 @@
+# Flask Web Framework
+flask==3.0.3
+flask-cors==4.0.0
+
+# Speech Recognition (Whisper)
+openai-whisper==20231117
+tiktoken==0.7.0
+
+# Text-to-Speech (Piper)
+piper-tts==1.2.0
+
+# Audio Processing
+librosa==0.10.2
+soundfile==0.12.1
+numpy==1.26.4
+
+# Optional: For better performance
+torch>=2.0.0
